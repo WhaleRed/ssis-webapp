@@ -1,0 +1,45 @@
+.navbar a {
+  color: white;
+}
+
+.nav-link.active{
+  color: orange;
+  background-color: black;
+  border-radius: 15px;
+}
+
+.navbar a:hover {
+  color: orange;
+}
+
+.dropdown-menu {
+  background-color: #353535;
+}
+
+.dropdown-menu a:hover {
+  color: orange;
+  background-color: black;
+  border-radius: 15px;
+}
+
+.dropdown-menu a.active {
+  color: white;
+  background-color: black;
+  border-radius: 15px;
+}
+
+#search-btn {
+  color: white;
+  border: 2px solid white;
+}
+
+#search-btn:hover {
+  color: Orange;
+  border: 2px solid black;
+  background-color: black;
+}
+
+.nav-link,
+.dropdown-item {
+  border-radius: 15px;
+}
