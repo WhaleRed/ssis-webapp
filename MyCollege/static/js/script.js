@@ -18,3 +18,5 @@ const sortDropdown = document.querySelectorAll('.dropdown-item');
       this.classList.add('active');
     });
   });
+
+  new DataTable('#example');
