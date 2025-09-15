@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mini-header">
+  <h3>PROGRAMS</h3>
+  <button id="add-btn">ADD</button>
+</div>
+
+<table id="table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>College</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BSCS</td>
+      <td>Bachelor of Science in Computer Science</td>
+      <td>CCS</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td>BSCE</td>
+      <td>Bachelor of Science in Civil Engineering</td>
+      <td>COE</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td>BS PolSci</td>
+      <td>Bachelor of Science in Polotical Science</td>
+      <td>CASS</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td>BSM</td>
+      <td>Bachelor of Science in Matdematics</td>
+      <td>CSM</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td>BSN</td>
+      <td>Bachelor of Science in Nursing</td>
+      <td>CHS</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>College</th>
+      <th>Actions</th>
+    </tr>
+  </tfoot>
+</table>
+
+{% endblock %}
