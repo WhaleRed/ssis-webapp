@@ -2,10 +2,14 @@
   color: white;
 }
 
-.nav-link.active{
+.navbar-dark .navbar-nav .nav-link.active{
   color: orange;
   background-color: black;
   border-radius: 15px;
+}
+
+.nav-link {
+  transition: all 0.3s ease;
 }
 
 .navbar a:hover {
