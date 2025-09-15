@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Student</h2>
-<p>Student test</p>
+<div class="mini-header">
+  <h3>STUDENTS</h3>
+  <button id="add-btn">ADD</button>
+</div>
 
-<table id="example" class="table table-striped">
+<table id="table" class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
@@ -12,6 +14,7 @@
       <th>Course</th>
       <th>Year</th>
       <th>Gender</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +25,10 @@
       <td>CSN</td>
       <td>1</td>
       <td>Male</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
     <tr>
       <td>0000-0001</td>
@@ -30,6 +37,10 @@
       <td>BSM</td>
       <td>1</td>
       <td>Male</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
     <tr>
       <td>0000-0002</td>
@@ -38,6 +49,10 @@
       <td>BSN</td>
       <td>3</td>
       <td>Male</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
     <tr>
       <td>0000-0003</td>
@@ -46,6 +61,10 @@
       <td>BS PolSci</td>
       <td>2</td>
       <td>Female</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
     <tr>
       <td>0000-0004</td>
@@ -54,6 +73,10 @@
       <td>BSCE</td>
       <td>1</td>
       <td>Male</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
     <tr>
       <td>0000-0005</td>
@@ -62,6 +85,10 @@
       <td>BSCS</td>
       <td>1</td>
       <td>Female</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
     </tr>
   </tbody>
   <tfoot>
@@ -72,6 +99,7 @@
       <th>Course</th>
       <th>Year</th>
       <th>Gender</th>
+      <th>Actions</th>
     </tr>
   </tfoot>
 </table>
