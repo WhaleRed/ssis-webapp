@@ -1,2 +1,4 @@
 
-new DataTable('#example');
+new DataTable('#table', {
+  lengthChange: false
+});
