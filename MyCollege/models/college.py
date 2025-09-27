@@ -9,3 +9,14 @@ def addCollege(college):
   db.commit()
 
   mycursor.close()
+
+def deleteCollege(college_code):    #Dapat Array I Pass
+  db = get_db()
+  mycursor = db.cursor()
+
+  sql = "DELETE FROM college WHERE college_code = %s"
+  mycursor.execute(sql, college_code)
+  db.commit()
+
+  mycursor.close()
+  
