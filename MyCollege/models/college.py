@@ -10,7 +10,7 @@ def addCollege(college):
 
   mycursor.close()
 
-def deleteCollege(college_code):    #Dapat Array I Pass
+def deleteCollege(college_code): 
   db = get_db()
   mycursor = db.cursor()
 
@@ -20,3 +20,12 @@ def deleteCollege(college_code):    #Dapat Array I Pass
 
   mycursor.close()
   
+def editCollege(college):
+  db = get_db()
+  mycursor = db.cursor()
+
+  sql = "UPDATE college SET college_code = %s, college_name = %s WHERE college_code = %s"
+  mycursor.execute(sql , college)
+  db.commit()
+
+  mycursor.close()
