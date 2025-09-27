@@ -1,5 +1,7 @@
 from ...db import get_db
 
+#functions take list as param
+
 def addStudent(student):
   db = get_db()
   mycursor = db.cursor()
@@ -10,3 +12,12 @@ def addStudent(student):
 
   mycursor.close()
 
+def deleteStudent(idnum):           
+  db = get_db()
+  mycursor = db.cursor()
+
+  sql = "DELETE FROM student WHERE student_id = %s"
+  mycursor.execute(sql, idnum)
+  db.commit()
+
+  mycursor.close()
