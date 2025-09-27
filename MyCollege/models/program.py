@@ -1,5 +1,7 @@
 from ...db import get_db
 
+#functions takes list as param
+
 def addProgram(program):
   db = get_db()
   mycursor = db.cursor()
@@ -8,4 +10,13 @@ def addProgram(program):
   mycursor.execute(sql, program)
   db.commit()
 
+  mycursor.close()
+
+def deleteProgram(program_code):    
+  db = get_db()
+  mycursor = db.cursor()
+
+  mycursor.execute("DELETE FROM program WHERE program_code = %s", program_code)
+  db.commit()
+  
   mycursor.close()
