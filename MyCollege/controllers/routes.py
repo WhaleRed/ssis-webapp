@@ -1,16 +1,16 @@
-from flask import Flask, render_template
+from flask import render_template
+from . import general_bp
 
-app = Flask(__name__, template_folder="../views/templates", static_folder="../views/static")
 
-@app.route('/')
-@app.route('/colleges')
+@general_bp.route('/', endpoint="colleges")
+@general_bp.route('/colleges')
 def colleges():
   return render_template("college.html")
 
-@app.route('/programs')
+@general_bp.route('/programs', endpoint="programs")
 def programs():
   return render_template("program.html")
 
-@app.route('/students')
+@general_bp.route('/students', endpoint="students")
 def students():
   return render_template("student.html")
