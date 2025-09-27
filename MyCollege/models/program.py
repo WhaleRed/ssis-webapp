@@ -20,3 +20,13 @@ def deleteProgram(program_code):
   db.commit()
   
   mycursor.close()
+
+def editProgram(program):
+  db = get_db()
+  mycursor = db.cursor()
+  
+  sql = "UPDATE program SET program_code = %s, program_name = %s, college_code = %s WHERE program_code =%s"
+  mycursor.execute(sql, program)
+  db.commit()
+
+  mycursor.close()
