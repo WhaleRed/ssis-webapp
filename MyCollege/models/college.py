@@ -1,4 +1,4 @@
-from ...db import get_db
+from MyCollege.db import get_db
 
 def addCollege(college):
   db = get_db()
