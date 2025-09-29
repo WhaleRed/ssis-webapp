@@ -3,7 +3,104 @@
 
 <div class="mini-header">
   <h3>COLLEGES</h3>
-  <button id="add-btn">ADD</button>
+  <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
+</div>
+
+<!--Add Modal-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Add College</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Add Form-->
+        <form>
+          <div class="form-group">
+            <label for="colCode">College Code</label>
+            <input class="form-control" id="colCode">
+          </div>
+          <div class="form-group">
+            <label for="colName">College Name</label>
+            <input class="form-control" id="colName">
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitColAdd">Add</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Edit Modal-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Edit College</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Edit Form-->
+        <form>
+          <div class="form-group">
+            <label for="colCodeEdit">College Code</label>
+            <input class="form-control" id="colCodeEdit">
+          </div>
+          <div class="form-group">
+            <label for="colNameEdit">College Name</label>
+            <input class="form-control" id="colNameEdit">
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitColEdit">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Delete Modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Delete College</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        Are you sure you want to delete this College?
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitColDelete">Delete</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <table id="table" class="table table-striped">
@@ -20,56 +117,8 @@
       <td>CCS</td>
       <td>College of Computed Studies</td>
       <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>CHS</td>
-      <td>College of Health Sciences</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>CSM</td>
-      <td>College of Science and Mathematics</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>COE</td>
-      <td>College of Engineering</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>CED</td>
-      <td>College of Education</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>CASS</td>
-      <td>College of Arts and Social Sciences</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>CEBA</td>
-      <td>College of Econimcs and Business Administration</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
+        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
       </td>
     </tr>
   </tbody>
