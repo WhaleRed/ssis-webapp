@@ -45,6 +45,46 @@
   </div>
 </div>
 
+<!--Edit Modal-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Edit Program</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Edit Form-->
+        <form>
+          <div class="form-group">
+            <label for="progCodeEdit">Program Code</label>
+            <input class="form-control" id="progCodeEdit">
+          </div>
+          <div class="form-group">
+            <label for="progNameEdit">Program Name</label>
+            <input class="form-control" id="progNameEdit">
+          </div>
+          <div class="form-group">
+            <label for="progColCodeEdit">College Code</label>
+            <input class="form-control" id="progColCodeEdit">
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitProgEdit">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <table id="table" class="table table-striped">
   <thead>
     <tr>
@@ -60,8 +100,8 @@
       <td>Bachelor of Science in Computer Science</td>
       <td>CCS</td>
       <td>
-        <a href="/edit/program" class="btn btn-secondary btn-sm">Edit</a>
-        <a href="/delete/program" class="btn btn-danger btn-delete btn-sm">Delete</a>
+        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
       </td>
     </tr>
   </tbody>
