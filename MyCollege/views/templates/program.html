@@ -2,7 +2,47 @@
 {% block content %}
 <div class="mini-header">
   <h3>PROGRAMS</h3>
-  <button id="add-btn">ADD</button>
+  <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
+</div>
+
+<!--Add Modal-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Add Program</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Add Form-->
+        <form>
+          <div class="form-group">
+            <label for="progCode">Program Code</label>
+            <input class="form-control" id="progCode">
+          </div>
+          <div class="form-group">
+            <label for="progName">Program Name</label>
+            <input class="form-control" id="progName">
+          </div>
+          <div class="form-group">
+            <label for="colCode">College Code</label>
+            <input class="form-control" id="colCode">
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitProgAdd">Add</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <table id="table" class="table table-striped">
@@ -20,44 +60,8 @@
       <td>Bachelor of Science in Computer Science</td>
       <td>CCS</td>
       <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>BSCE</td>
-      <td>Bachelor of Science in Civil Engineering</td>
-      <td>COE</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>BS PolSci</td>
-      <td>Bachelor of Science in Polotical Science</td>
-      <td>CASS</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>BSM</td>
-      <td>Bachelor of Science in Matdematics</td>
-      <td>CSM</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>BSN</td>
-      <td>Bachelor of Science in Nursing</td>
-      <td>CHS</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
+        <a href="/edit/program" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="/delete/program" class="btn btn-danger btn-delete btn-sm">Delete</a>
       </td>
     </tr>
   </tbody>
