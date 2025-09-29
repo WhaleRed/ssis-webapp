@@ -2,7 +2,59 @@
 {% block content %}
 <div class="mini-header">
   <h3>STUDENTS</h3>
-  <button id="add-btn">ADD</button>
+  <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
+</div>
+
+<!--Add Modal-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Add Student</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Add Form-->
+        <form>
+          <div class="form-group">
+            <label for="studentId">ID</label>
+            <input class="form-control" id="studentId">
+          </div>
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input class="form-control" id="firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" id="lastName">
+          </div>
+          <div class="form-group">
+            <label for="course">Course</label>
+            <input class="form-control" id="course">
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input class="form-control" id="year">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <input class="form-control" id="gender">
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitColAdd">Add</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <table id="table" class="table table-striped">
@@ -26,68 +78,8 @@
       <td>1</td>
       <td>Male</td>
       <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>0000-0001</td>
-      <td>Nero</td>
-      <td>Mro</td>
-      <td>BSM</td>
-      <td>1</td>
-      <td>Male</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>0000-0002</td>
-      <td>Sero</td>
-      <td>Zero</td>
-      <td>BSN</td>
-      <td>3</td>
-      <td>Male</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>0000-0003</td>
-      <td>Lero</td>
-      <td>Mero</td>
-      <td>BS PolSci</td>
-      <td>2</td>
-      <td>Female</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>0000-0004</td>
-      <td>Sero</td>
-      <td>Zero</td>
-      <td>BSCE</td>
-      <td>1</td>
-      <td>Male</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-    <tr>
-      <td>0000-0005</td>
-      <td>ero</td>
-      <td>hero</td>
-      <td>BSCS</td>
-      <td>1</td>
-      <td>Female</td>
-      <td>
-        <button class="btn btn-sm btn-warning me-1">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
+        <a href="/edit/student" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="/delete/student" class="btn btn-danger btn-delete btn-sm">Delete</a>
       </td>
     </tr>
   </tbody>
