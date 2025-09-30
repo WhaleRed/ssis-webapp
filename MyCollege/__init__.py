@@ -7,6 +7,8 @@ def create_app():
 
   from .controllers.general import general_bp as general_blueprint
   from .controllers.college import college_bp as college_blueprint
+  from .controllers.program import program_bp as program_blueprint
   app.register_blueprint(general_blueprint)
   app.register_blueprint(college_blueprint)
+  app.register_blueprint(program_blueprint)
   return app
