@@ -6,6 +6,19 @@
   <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
 </div>
 
+<div>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+
 <!--Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -21,21 +34,23 @@
       <div class="modal-body">
 
         <!-- Add Form-->
-        <form>
+        <form action="{{url_for('college.add_college')}}" method="POST">
           <div class="form-group">
             <label for="colCode">College Code</label>
-            <input class="form-control" id="colCode">
+            <input class="form-control" id="colCode" name="colCodeAdd">
           </div>
           <div class="form-group">
             <label for="colName">College Name</label>
-            <input class="form-control" id="colName">
+            <input class="form-control" id="colName" name="colNameAdd">
           </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitColAdd">Add</button>
+          </div>
+
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitColAdd">Add</button>
       </div>
 
     </div>
