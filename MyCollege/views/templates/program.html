@@ -5,6 +5,20 @@
   <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
 </div>
 
+<div>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center"
+    role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+
 <!--Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -20,25 +34,27 @@
       <div class="modal-body">
 
         <!-- Add Form-->
-        <form>
+        <form action="{{url_for('program.add_program')}}" method="POST">
           <div class="form-group">
             <label for="progCode">Program Code</label>
-            <input class="form-control" id="progCode">
+            <input class="form-control" id="progCode" name="progCodeAdd">
           </div>
           <div class="form-group">
             <label for="progName">Program Name</label>
-            <input class="form-control" id="progName">
+            <input class="form-control" id="progName" name="progNameAdd">
           </div>
           <div class="form-group">
             <label for="colCode">College Code</label>
-            <input class="form-control" id="colCode">
+            <input class="form-control" id="colCode" name="colCodeAdd">
           </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitProgAdd">Add</button>
+          </div>
+
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitProgAdd">Add</button>
       </div>
 
     </div>
