@@ -147,18 +147,20 @@
     </tr>
   </thead>
   <tbody>
+    {% for row in data %}
     <tr>
-      <td>0000-0000</td>
-      <td>Sero</td>
-      <td>Zero</td>
-      <td>CSN</td>
-      <td>1</td>
-      <td>Male</td>
+      <td>{{row[0]}}</td>
+      <td>{{row[1]}}</td>
+      <td>{{row[2]}}</td>
+      <td>{{row[3]}}</td>
+      <td>{{row[4]}}</td>
+      <td>{{row[5]}}</td>
       <td>
         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
       </td>
     </tr>
+    {% endfor %}
   </tbody>
   <tfoot>
     <tr>
