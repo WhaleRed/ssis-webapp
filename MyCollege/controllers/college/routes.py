@@ -1,0 +1,15 @@
+from flask import request, redirect, url_for, flash
+from . import college_bp
+from MyCollege.models.college import *
+
+@college_bp.route('/add_college', methods = ['POST'])
+def add_college():
+  if request.method == 'POST':
+    colCode = request.form['colCodeAdd']
+    colName = request.form['colNameAdd']
+
+    college = [colCode, colName]
+    addCollege(college)
+    flash('College Added Succesfully')
+
+    return redirect(url_for('general.colleges'))
