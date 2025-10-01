@@ -13,3 +13,16 @@ def add_college():
     flash('College Added Succesfully')
 
     return redirect(url_for('general.colleges'))
+  
+@college_bp.route('/edit_college', methods = ['POST'])
+def edit_college():
+  if request. method == 'POST':
+    colInitial = request.form['colInitial']
+    colCode = request.form['codeEdit']
+    colName = request.form['nameEdit']
+
+    college = [colCode, colName, colInitial]
+    editCollege(college)
+    flash('College Edited Succesfully')
+
+    return redirect(url_for('general.colleges'))
