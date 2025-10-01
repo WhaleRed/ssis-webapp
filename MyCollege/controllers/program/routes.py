@@ -28,3 +28,14 @@ def edit_program():
     flash('Program Edited Succesfully')
     
     return redirect(url_for('general.programs'))
+  
+@program_bp.route('/delete_program', methods = ['POST'])
+def delete_program():
+  if request.method == 'POST':
+    code = request.form['progCodeDelete']
+
+    program = [code]
+    deleteProgram(program)
+    flash('Program Deleted Succesfully')
+
+    return redirect(url_for('general.programs'))
