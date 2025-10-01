@@ -29,3 +29,14 @@ def editCollege(college):
   db.commit()
 
   mycursor.close()
+
+def populateCollege(page):
+  db = get_db()
+  mycursor = db.cursor()
+
+  offset = (page - 1) * 10
+  sql = "SELECT * FROM college OFFSET %s LIMIT 10"
+  mycursor.execute(sql, (offset,))
+  result = mycursor.fetchall()
+
+  return result

@@ -30,3 +30,14 @@ def editProgram(program):
   db.commit()
 
   mycursor.close()
+
+def populateProgram(page):
+  db = get_db()
+  mycursor = db.cursor()
+
+  offset = (page - 1) * 25
+  sql = "SELECT * FROM program OFFSET %s LIMIT 25"
+  mycursor.execute(sql, (offset,))
+  result = mycursor.fetchall()
+
+  return result

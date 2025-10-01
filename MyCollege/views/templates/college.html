@@ -6,6 +6,20 @@
   <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" id="add-btn">ADD</button>
 </div>
 
+<div>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center"
+    role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+</div>
+
 <!--Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -21,21 +35,23 @@
       <div class="modal-body">
 
         <!-- Add Form-->
-        <form>
+        <form action="{{url_for('college.add_college')}}" method="POST">
           <div class="form-group">
             <label for="colCode">College Code</label>
-            <input class="form-control" id="colCode">
+            <input class="form-control" id="colCode" name="colCodeAdd">
           </div>
           <div class="form-group">
             <label for="colName">College Name</label>
-            <input class="form-control" id="colName">
+            <input class="form-control" id="colName" name="colNameAdd">
           </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitColAdd">Add</button>
+          </div>
+
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitColAdd">Add</button>
       </div>
 
     </div>
@@ -57,21 +73,22 @@
       <div class="modal-body">
 
         <!-- Edit Form-->
-        <form>
+        <form action="{{url_for('college.edit_college')}}" method="POST">
+          <input type="hidden" id="colCodeInitial" name="colInitial">
           <div class="form-group">
             <label for="colCodeEdit">College Code</label>
-            <input class="form-control" id="colCodeEdit">
+            <input class="form-control" id="colCodeEdit" name="codeEdit">
           </div>
           <div class="form-group">
             <label for="colNameEdit">College Name</label>
-            <input class="form-control" id="colNameEdit">
+            <input class="form-control" id="colNameEdit" name="nameEdit">
+          </div>
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitColEdit">Save</button>
           </div>
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitColEdit">Save</button>
       </div>
 
     </div>
@@ -93,11 +110,15 @@
       <div class="modal-body">
         Are you sure you want to delete this College?
       </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitColDelete">Delete</button>
-      </div>
+
+      <form action="{{url_for('college.delete_college')}}" method="POST">
+        <input type="hidden" id="colCodeDelete" name="colCodeDelete">
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="submitColDelete">Delete</button>
+        </div>
+      </form>
 
     </div>
   </div>
@@ -113,14 +134,17 @@
   </thead>
 
   <tbody>
+    {% for row in data %}
     <tr>
-      <td>CCS</td>
-      <td>College of Computed Studies</td>
+      <td>{{row[0]}}</td>
+      <td>{{row[1]}}</td>
       <td>
-        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" edit-code="{{row[0]}}"
+          edit-name="{{row[1]}}">Edit</button>
+        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" del-code="{{row[0]}}">Delete</button>
       </td>
     </tr>
+    {% endfor %}
   </tbody>
   <tfoot>
     <tr>
@@ -130,4 +154,8 @@
     </tr>
   </tfoot>
 </table>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/college.js') }}"></script>
 {% endblock %}

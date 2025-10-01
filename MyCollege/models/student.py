@@ -31,3 +31,14 @@ def editStudent(student):
   db.commit()
 
   mycursor.close()
+
+def populateStudent(page):
+  db = get_db()
+  mycursor = db.cursor()
+
+  offset = (page - 1) * 50
+  sql = "SELECT * FROM student OFFSET %s LIMIT 50"
+  mycursor.execute(sql, (offset,))
+  result = mycursor.fetchall()
+
+  return result
