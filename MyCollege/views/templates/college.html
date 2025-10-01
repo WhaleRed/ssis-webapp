@@ -10,7 +10,8 @@
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   {% for message in messages %}
-  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center" role="alert">
+  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center"
+    role="alert">
     {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
@@ -72,21 +73,22 @@
       <div class="modal-body">
 
         <!-- Edit Form-->
-        <form>
+        <form action="{{url_for('college.edit_college')}}" method="POST">
+          <input type="hidden" id="colCodeInitial" name="colInitial">
           <div class="form-group">
             <label for="colCodeEdit">College Code</label>
-            <input class="form-control" id="colCodeEdit">
+            <input class="form-control" id="colCodeEdit" name="codeEdit">
           </div>
           <div class="form-group">
             <label for="colNameEdit">College Name</label>
-            <input class="form-control" id="colNameEdit">
+            <input class="form-control" id="colNameEdit" name="nameEdit">
+          </div>
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitColEdit">Save</button>
           </div>
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitColEdit">Save</button>
       </div>
 
     </div>
@@ -133,7 +135,8 @@
       <td>{{row[0]}}</td>
       <td>{{row[1]}}</td>
       <td>
-        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" edit-code="{{row[0]}}"
+          edit-name="{{row[1]}}">Edit</button>
         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
       </td>
     </tr>
@@ -147,4 +150,8 @@
     </tr>
   </tfoot>
 </table>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/college.js') }}"></script>
 {% endblock %}
