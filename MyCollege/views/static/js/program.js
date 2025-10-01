@@ -1,4 +1,5 @@
 const editModal = document.getElementById('editModal');
+const deleteModal = document.getElementById('deleteModal');
 
 if (editModal) {
   editModal.addEventListener('show.bs.modal', function (event) {
@@ -14,5 +15,17 @@ if (editModal) {
     document.getElementById('progCodeEdit').value = code;
     document.getElementById('progNameEdit').value = name;
     document.getElementById('progColCodeEdit').value = college
+  });
+}
+
+if (deleteModal) {
+  deleteModal.addEventListener('show.bs.modal', function (event){
+    const button = event.relatedTarget;
+
+    //Get data from button
+    const code = button.getAttribute('del-code');
+
+    //Fill hidden input
+    document.getElementById('progCodeDelete').value = code;
   });
 }
