@@ -16,7 +16,7 @@ def add_college():
   
 @college_bp.route('/edit_college', methods = ['POST'])
 def edit_college():
-  if request. method == 'POST':
+  if request.method == 'POST':
     colInitial = request.form['colInitial']
     colCode = request.form['codeEdit']
     colName = request.form['nameEdit']
@@ -25,4 +25,14 @@ def edit_college():
     editCollege(college)
     flash('College Edited Succesfully')
 
+    return redirect(url_for('general.colleges'))
+  
+@college_bp.route('/delete_college', methods = ['POST'])
+def delete_college():
+  if request.method == 'POST':
+    code = request.form['colCodeDelete']
+
+    college = [code]
+    deleteCollege(college)
+    flash('College Deleted Succesfully')
     return redirect(url_for('general.colleges'))
