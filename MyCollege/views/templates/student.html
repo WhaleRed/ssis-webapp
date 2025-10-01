@@ -9,7 +9,8 @@
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   {% for message in messages %}
-  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center" role="alert">
+  <div class="alert alert-success alert-dismissable fade show d-flex justify-content-between align-items-center"
+    role="alert">
     {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
@@ -86,37 +87,38 @@
       <div class="modal-body">
 
         <!-- Edit Form-->
-        <form>
+        <form action="{{url_for('student.edit_student')}}" method="POST">
+          <input type="hidden" id="studInitial" name="studInitial">
           <div class="form-group">
             <label for="studentIdEdit">ID</label>
-            <input class="form-control" id="studentIdEdit">
+            <input class="form-control" id="studentIdEdit" name="idEdit">
           </div>
           <div class="form-group">
             <label for="firstNameEdit">First Name</label>
-            <input class="form-control" id="firstNameEdit">
+            <input class="form-control" id="firstNameEdit" name="fnameEdit">
           </div>
           <div class="form-group">
             <label for="lastNameEdit">Last Name</label>
-            <input class="form-control" id="lastNameEdit">
+            <input class="form-control" id="lastNameEdit" name="lnameEdit">
           </div>
           <div class="form-group">
             <label for="courseEdit">Course</label>
-            <input class="form-control" id="courseEdit">
+            <input class="form-control" id="courseEdit" name="courseEdit">
           </div>
           <div class="form-group">
             <label for="yearEdit">Year</label>
-            <input class="form-control" id="yearEdit">
+            <input class="form-control" id="yearEdit" name="yearEdit">
           </div>
           <div class="form-group">
             <label for="genderEdit">Gender</label>
-            <input class="form-control" id="genderEdit">
+            <input class="form-control" id="genderEdit" name="genderEdit">
+          </div>
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="submitStudEdit">Save</button>
           </div>
         </form>
-      </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitStudEdit">Save</button>
       </div>
 
     </div>
@@ -170,7 +172,9 @@
       <td>{{row[4]}}</td>
       <td>{{row[5]}}</td>
       <td>
-        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" edit-id="{{row[0]}}"
+          edit-fname="{{row[1]}}" edit-lname="{{row[2]}}" edit-year="{{row[3]}}" edit-gender="{{row[4]}}"
+          edit-course="{{row[5]}}">Edit</button>
         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
       </td>
     </tr>
@@ -188,4 +192,8 @@
     </tr>
   </tfoot>
 </table>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
 {% endblock %}
