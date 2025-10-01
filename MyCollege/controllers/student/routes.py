@@ -34,3 +34,14 @@ def edit_student():
     flash('Student Edited Succesfully')
 
     return redirect(url_for('general.students'))
+  
+@student_bp.route('/delete_student', methods = ['POST'])
+def delete_student():
+  if request.method == 'POST':
+    studid = request.form['studDelete']
+
+    student = [studid]
+    deleteStudent(student)
+    flash('Student Deleted Succesfully')
+
+    return redirect(url_for('general.students'))
