@@ -140,11 +140,15 @@
       <div class="modal-body">
         Are you sure you want to delete this Student?
       </div>
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitStudDelete">Delete</button>
-      </div>
+
+      <form action="{{url_for('student.delete_student')}}" method="POST">
+        <input type="hidden" id="studDelete" name="studDelete">
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="submitStudDelete">Delete</button>
+        </div>
+      </form>
 
     </div>
   </div>
@@ -175,7 +179,8 @@
         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" edit-id="{{row[0]}}"
           edit-fname="{{row[1]}}" edit-lname="{{row[2]}}" edit-year="{{row[3]}}" edit-gender="{{row[4]}}"
           edit-course="{{row[5]}}">Edit</button>
-        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+          del-stud="{{row[0]}}">Delete</button>
       </td>
     </tr>
     {% endfor %}
