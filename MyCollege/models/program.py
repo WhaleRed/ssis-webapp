@@ -41,3 +41,42 @@ def populateProgram(page):
   result = mycursor.fetchall()
 
   return result
+
+def getAllPrograms(search='', start=0, length=10):
+  db = get_db()
+  mycursor = db.cursor()
+    
+  if search:
+    mycursor.execute("""
+                     SELECT * FROM program 
+                     WHERE program_code ILIKE %s OR program_name ILIKE %s OR college_code ILIKE %s
+                     ORDER BY program_code
+                     OFFSET %s LIMIT %s
+                     """, (f'%{search}%', f'%{search}%', f'%{search}%', start, length))
+  else:
+    mycursor.execute("""
+                     SELECT * FROM program
+                     ORDER BY program_code
+                     OFFSET %s LIMIT %s
+                     """, (start, length))
+
+  result = mycursor.fetchall()
+  mycursor.close()
+  return result
+
+def getProgramCount(search=''):
+  db = get_db()
+  mycursor = db.cursor()
+
+  if search:
+    mycursor.execute("""
+                     SELECT COUNT(*) FROM program
+                     WHERE program_code ILIKE %s OR program_name ILIKE %s OR college_code ILIKE %s
+                     """, (f'%{search}%', f'%{search}%', f'%{search}%'))
+  else:
+    mycursor.execute("SELECT COUNT(*) FROM program")
+
+  count = mycursor.fetchone()[0]
+  mycursor.close()
+
+  return count

@@ -1,10 +1,41 @@
-from flask import request, redirect, url_for, flash
+from flask import request, redirect, url_for, flash, jsonify
 from . import student_bp
 from MyCollege.models.student import *
 
-@student_bp.route('/add_student', methods = ['POST'])
+@student_bp.route('/student/data', methods=['POST'])
+def get_students_data():
+    try:
+        #DataTables Param for server side
+        draw = int(request.form.get('draw', 1))
+        start = int(request.form.get('start', 0))
+        length = int(request.form.get('length', 10))
+        search_value = request.form.get('search[value]', '')
+
+        retrieve = getAllStudents(search=search_value, start=start, length=length)
+        total_records = getStudentCount()
+        filtered_records = getStudentCount(search=search_value)
+
+        data = [{
+            'id': s[0],
+            'fname': s[1],
+            'lname': s[2],
+            'year': s[3],
+            'gender': s[4],
+            'course': s[5]
+        } for s in retrieve]
+
+        return jsonify ({
+            'draw': draw,
+            'recordsTotal': total_records,
+            'recordsFiltered': filtered_records,
+            'data': data
+        })
+    except Exception as e:
+        return jsonify({'data': [], 'error': str(e)})
+
+
+@student_bp.route('/add_student', methods=['POST'])
 def add_student():
-  if request.method == 'POST':
     studId = request.form['idAdd']
     fname = request.form['firstNameAdd']
     lname = request.form['lastNameAdd']
@@ -14,13 +45,11 @@ def add_student():
 
     student = [studId, fname, lname, year, gender, course]
     addStudent(student)
-    flash('Student Added Succesfully')
+    return jsonify({"message": "Student added successfully"})
 
-    return redirect(url_for('general.students'))
-  
-@student_bp.route('/edit_student', methods = ['POST'])
+
+@student_bp.route('/edit_student', methods=['POST'])
 def edit_student():
-  if request.method == 'POST':
     studInitial = request.form['studInitial']
     studId = request.form['idEdit']
     fname = request.form['fnameEdit']
@@ -31,17 +60,12 @@ def edit_student():
 
     student = [studId, fname, lname, year, gender, course, studInitial]
     editStudent(student)
-    flash('Student Edited Succesfully')
+    return jsonify({"message": "Student updated successfully"})
 
-    return redirect(url_for('general.students'))
-  
-@student_bp.route('/delete_student', methods = ['POST'])
+
+@student_bp.route('/delete_student', methods=['POST'])
 def delete_student():
-  if request.method == 'POST':
     studid = request.form['studDelete']
-
     student = [studid]
     deleteStudent(student)
-    flash('Student Deleted Succesfully')
-
-    return redirect(url_for('general.students'))
+    return jsonify({"message": "Student deleted successfully"})
