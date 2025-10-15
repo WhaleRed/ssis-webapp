@@ -40,3 +40,14 @@ def populateCollege(page):
   result = mycursor.fetchall()
 
   return result
+
+def getAllColleges():
+  db = get_db()
+  mycursor = db.cursor()
+
+  sql = "SELECT * FROM COLLEGE"
+  mycursor.execute(sql)
+  result = mycursor.fetchall()
+  mycursor.close()
+
+  return result
