@@ -43,11 +43,53 @@ def populateStudent(page):
 
   return result
 
-def getAllStudents():
+def getAllStudents(search='', start=0, length=10):
     db = get_db()
     mycursor = db.cursor()
-    sql = "SELECT * FROM student"
-    mycursor.execute(sql)
+    
+    if search:
+      if search.isdigit() and len(search) == 1:
+        mycursor.execute("SELECT * FROM student WHERE CAST(year_level AS TEXT) ILIKE %s ORDER BY student_id OFFSET %s LIMIT %s", (F'%{search}%', start, length))
+      else:
+        mycursor.execute("""
+                        SELECT * FROM student 
+                        WHERE student_id ILIKE %s OR 
+                        first_name ILIKE %s OR 
+                        last_name ILIKE %s OR 
+                        CAST(year_level AS TEXT) ILIKE %s OR 
+                        gender ILIKE %s OR 
+                        program_code ILIKE %s 
+                        ORDER BY student_id OFFSET %s LIMIT %s
+                        """, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', start, length))
+    else:
+      mycursor.execute("""
+                       SELECT * FROM student 
+                       ORDER BY student_id
+                       OFFSET %s LIMIT %s
+                       """, (start, length))
+
     result = mycursor.fetchall()
     mycursor.close()
     return result
+
+def getStudentCount(search=''):
+  db = get_db()
+  mycursor = db.cursor()
+
+  if search:
+    if search.isdigit() and len(search) == 1:
+      mycursor.execute("SELECT COUNT (*) FROM student WHERE CAST(year_level AS TEXT) ILIKE %s", (f'%{search}%',))
+    else:
+      mycursor.execute("""
+                      SELECT COUNT(*) FROM student
+                      WHERE student_id ILIKE %s OR first_name ILIKE %s OR
+                      last_name ILIKE %s OR
+                      gender ILIKE %s OR program_code ILIKE %s
+                      """, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
+  else:
+    mycursor.execute("SELECT COUNT(*) FROM student")
+
+  result = mycursor.fetchone()[0]
+  mycursor.close()
+
+  return result
