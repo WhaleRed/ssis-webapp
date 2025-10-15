@@ -1,10 +1,27 @@
-from flask import request, redirect, url_for, flash
+from flask import request, redirect, url_for, flash, jsonify
 from . import student_bp
 from MyCollege.models.student import *
 
-@student_bp.route('/add_student', methods = ['POST'])
+@student_bp.route('/student/data')
+def get_students_data():
+    data = getAllStudents()
+    
+    students = [
+        {
+            'id': row[0],
+            'fname': row[1],
+            'lname': row[2],
+            'year': row[3],
+            'gender': row[4],
+            'course': row[5]
+        }
+        for row in data
+    ]
+    return jsonify({"data": students})
+
+
+@student_bp.route('/add_student', methods=['POST'])
 def add_student():
-  if request.method == 'POST':
     studId = request.form['idAdd']
     fname = request.form['firstNameAdd']
     lname = request.form['lastNameAdd']
@@ -14,13 +31,11 @@ def add_student():
 
     student = [studId, fname, lname, year, gender, course]
     addStudent(student)
-    flash('Student Added Succesfully')
+    return jsonify({"message": "Student added successfully"})
 
-    return redirect(url_for('general.students'))
-  
-@student_bp.route('/edit_student', methods = ['POST'])
+
+@student_bp.route('/edit_student', methods=['POST'])
 def edit_student():
-  if request.method == 'POST':
     studInitial = request.form['studInitial']
     studId = request.form['idEdit']
     fname = request.form['fnameEdit']
@@ -31,17 +46,12 @@ def edit_student():
 
     student = [studId, fname, lname, year, gender, course, studInitial]
     editStudent(student)
-    flash('Student Edited Succesfully')
+    return jsonify({"message": "Student updated successfully"})
 
-    return redirect(url_for('general.students'))
-  
-@student_bp.route('/delete_student', methods = ['POST'])
+
+@student_bp.route('/delete_student', methods=['POST'])
 def delete_student():
-  if request.method == 'POST':
     studid = request.form['studDelete']
-
     student = [studid]
     deleteStudent(student)
-    flash('Student Deleted Succesfully')
-
-    return redirect(url_for('general.students'))
+    return jsonify({"message": "Student deleted successfully"})
