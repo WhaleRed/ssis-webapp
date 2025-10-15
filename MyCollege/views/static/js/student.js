@@ -2,9 +2,12 @@
 
 $(document).ready(function () {
   const table = $('#studentTable').DataTable({
+    processing: true,
+    serverSide: true,
     ajax: {
       url: '/student/data',
-      dataSrc: 'data'
+      dataSrc: 'data',
+      type: 'POST'
     },
     columns: [
       { data: 'id' },
