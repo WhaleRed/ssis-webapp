@@ -25,9 +25,12 @@ if (deleteModal) {
 $(document).ready(function () {
 
   const table = $('#colTable').DataTable({
+    processing: true,
+    serverSide: true,
     ajax: {
       url: '/college/data',
-      dataSrc: 'data'
+      dataSrc: 'data',
+      type: 'POST'
     },
     columns: [
       { data: 'code' },
