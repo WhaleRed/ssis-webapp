@@ -2,22 +2,36 @@ from flask import request, redirect, url_for, flash, jsonify
 from . import student_bp
 from MyCollege.models.student import *
 
-@student_bp.route('/student/data')
+@student_bp.route('/student/data', methods=['POST'])
 def get_students_data():
-    data = getAllStudents()
-    
-    students = [
-        {
-            'id': row[0],
-            'fname': row[1],
-            'lname': row[2],
-            'year': row[3],
-            'gender': row[4],
-            'course': row[5]
-        }
-        for row in data
-    ]
-    return jsonify({"data": students})
+    try:
+        #DataTables Param for server side
+        draw = int(request.form.get('draw', 1))
+        start = int(request.form.get('start', 0))
+        length = int(request.form.get('length', 10))
+        search_value = request.form.get('search[value]', '')
+
+        retrieve = getAllStudents(search=search_value, start=start, length=length)
+        total_records = getStudentCount()
+        filtered_records = getStudentCount(search=search_value)
+
+        data = [{
+            'id': s[0],
+            'fname': s[1],
+            'lname': s[2],
+            'year': s[3],
+            'gender': s[4],
+            'course': s[5]
+        } for s in retrieve]
+
+        return jsonify ({
+            'draw': draw,
+            'recordsTotal': total_records,
+            'recordsFiltered': filtered_records,
+            'data': data
+        })
+    except Exception as e:
+        return jsonify({'data': [], 'error': str(e)})
 
 
 @student_bp.route('/add_student', methods=['POST'])
