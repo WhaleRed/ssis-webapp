@@ -2,11 +2,31 @@ from flask import request, jsonify
 from . import program_bp
 from MyCollege.models.program import *
 
-@program_bp.route('/program/data')
+@program_bp.route('/program/data', methods=['POST'])
 def get_programs_data():
-    programs = getAllPrograms()
-    data = [{"code": row[0], "name": row[1], "college": row[2]} for row in programs]
-    return jsonify({"data": data})
+    try:
+        #DataTables Parameter for server side
+        draw = int(request.form.get('draw', 1))
+        start = int(request.form.get('start', 0))
+        length = int(request.form.get('length', 10))
+        search_value = request.form.get('search[value]', '')
+
+        #Data retrieval
+        retrieve = getAllPrograms(search=search_value, start=start, length=length)
+        total_records = getProgramCount()
+        filtered_records = getProgramCount(search=search_value)
+
+        data = [{'code': p[0], 'name': p[1], 'college': p[2]} for p in retrieve]
+
+        return jsonify ({
+            'draw': draw,
+            'recordsTotal': total_records,
+            'recordsFiltered': filtered_records,
+            'data': data
+        })
+    
+    except Exception as e:
+        return jsonify({'data': [], 'error': str(e)})
 
 @program_bp.route('/add_program', methods=['POST'])
 def add_program():
