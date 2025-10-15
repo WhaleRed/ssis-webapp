@@ -42,3 +42,12 @@ def populateStudent(page):
   result = mycursor.fetchall()
 
   return result
+
+def getAllStudents():
+    db = get_db()
+    mycursor = db.cursor()
+    sql = "SELECT * FROM student"
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    mycursor.close()
+    return result
