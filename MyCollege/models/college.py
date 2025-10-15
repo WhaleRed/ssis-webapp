@@ -41,13 +41,41 @@ def populateCollege(page):
 
   return result
 
-def getAllColleges():
+def getAllColleges(search='', start=0, length=10):
   db = get_db()
   mycursor = db.cursor()
 
-  sql = "SELECT * FROM COLLEGE"
-  mycursor.execute(sql)
+  if search:
+    mycursor.execute("""
+                     SELECT * FROM college 
+                     WHERE college_code ILIKE %s OR college_name ILIKE %s 
+                     ORDER BY college_code 
+                     OFFSET %s LIMIT %s
+                     """, (f'%{search}%', f'%{search}%', start, length))
+  else: 
+    mycursor.execute("""
+                     Select * FROM college
+                     ORDER BY college_code
+                     OFFSET %s LIMIT %s
+                     """, (start, length))
   result = mycursor.fetchall()
   mycursor.close()
 
   return result
+
+def getCollegeCount(search=''):
+  db = get_db()
+  mycursor = db.cursor()
+
+  if search:
+    mycursor.execute("""
+                     SELECT COUNT(*) FROM college 
+                     WHERE college_code ILIKE %s OR college_name ILIKE %s
+                     """, (f'%{search}%', f'%{search}%'))
+  else:
+    mycursor.execute("SELECT COUNT(*) FROM college")
+  
+  count = mycursor.fetchone()[0]
+  mycursor.close()
+
+  return count
