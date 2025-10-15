@@ -1,38 +1,56 @@
-from flask import request, redirect, url_for, flash
+from flask import request, jsonify
 from . import college_bp
-from MyCollege.models.college import *
+from MyCollege.models.college import addCollege, editCollege, deleteCollege, getAllColleges
 
-@college_bp.route('/add_college', methods = ['POST'])
+@college_bp.route('/college/data')
+def get_colleges_data():
+    try:
+        colleges = getAllColleges() 
+        data = [{'code': c[0], 'name': c[1]} for c in colleges]
+        return jsonify({'data': data})
+    except Exception as e:
+        return jsonify({'data': [], 'error': str(e)})
+
+
+@college_bp.route('/add_college', methods=['POST'])
 def add_college():
-  if request.method == 'POST':
-    colCode = request.form['colCodeAdd']
-    colName = request.form['colNameAdd']
+    try:
+        colCode = request.form['colCodeAdd']
+        colName = request.form['colNameAdd']
 
-    college = [colCode, colName]
-    addCollege(college)
-    flash('College Added Succesfully')
+        addCollege([colCode, colName])
+        return jsonify({'success': True, 'message': 'College added successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
-    return redirect(url_for('general.colleges'))
-  
-@college_bp.route('/edit_college', methods = ['POST'])
+
+
+@college_bp.route('/edit_college', methods=['POST'])
 def edit_college():
-  if request.method == 'POST':
-    colInitial = request.form['colInitial']
-    colCode = request.form['codeEdit']
-    colName = request.form['nameEdit']
+    try:
+        colInitial = request.form['colInitial']
+        colCode = request.form['codeEdit']
+        colName = request.form['nameEdit']
 
-    college = [colCode, colName, colInitial]
-    editCollege(college)
-    flash('College Edited Succesfully')
+        editCollege([colCode, colName, colInitial])
+        return jsonify({'success': True, 'message': 'College updated successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
-    return redirect(url_for('general.colleges'))
-  
-@college_bp.route('/delete_college', methods = ['POST'])
+
+@college_bp.route('/delete_college', methods=['POST'])
 def delete_college():
-  if request.method == 'POST':
-    code = request.form['colCodeDelete']
+    try:
+        code = request.form['colCodeDelete']
+        deleteCollege([code])
+        return jsonify({'success': True, 'message': 'College deleted successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+    
+@college_bp.route('/data')
+def get_college_data():
+    colleges = getAllColleges()
 
-    college = [code]
-    deleteCollege(college)
-    flash('College Deleted Succesfully')
-    return redirect(url_for('general.colleges'))
+    data = [{'code': c[0], 'name': c[1]} for c in colleges]
+
+    return jsonify({'data': data})
