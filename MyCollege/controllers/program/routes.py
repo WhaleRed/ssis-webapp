@@ -1,41 +1,32 @@
-from flask import request, redirect, url_for, flash
+from flask import request, jsonify
 from . import program_bp
 from MyCollege.models.program import *
 
-@program_bp.route('/add_program', methods = ['POST'])
+@program_bp.route('/program/data')
+def get_programs_data():
+    programs = getAllPrograms()
+    data = [{"code": row[0], "name": row[1], "college": row[2]} for row in programs]
+    return jsonify({"data": data})
+
+@program_bp.route('/add_program', methods=['POST'])
 def add_program():
-  if request.method == 'POST':
     progCode = request.form['progCodeAdd']
     progName = request.form['progNameAdd']
     colCode = request.form['colCodeAdd']
+    addProgram([progCode, progName, colCode])
+    return jsonify({'status': 'success', 'message': 'Program added successfully'})
 
-    program = [progCode, progName, colCode]
-    addProgram(program)
-    flash('Program Added Succesfully')
-
-    return redirect(url_for('general.programs'))
-  
-@program_bp.route('/edit_program', methods = ['POST'])
+@program_bp.route('/edit_program', methods=['POST'])
 def edit_program():
-  if request.method == 'POST':
     progInitial = request.form['progInitial']
     progCode = request.form['codeEdit']
     progName = request.form['nameEdit']
     progColCode = request.form['colEdit']
+    editProgram([progCode, progName, progColCode, progInitial])
+    return jsonify({'status': 'success', 'message': 'Program edited successfully'})
 
-    program = [progCode, progName, progColCode, progInitial]
-    editProgram(program)
-    flash('Program Edited Succesfully')
-    
-    return redirect(url_for('general.programs'))
-  
-@program_bp.route('/delete_program', methods = ['POST'])
+@program_bp.route('/delete_program', methods=['POST'])
 def delete_program():
-  if request.method == 'POST':
     code = request.form['progCodeDelete']
-
-    program = [code]
-    deleteProgram(program)
-    flash('Program Deleted Succesfully')
-
-    return redirect(url_for('general.programs'))
+    deleteProgram([code])
+    return jsonify({'status': 'success', 'message': 'Program deleted successfully'})
