@@ -41,3 +41,11 @@ def populateProgram(page):
   result = mycursor.fetchall()
 
   return result
+
+def getAllPrograms():
+    db = get_db()
+    mycursor = db.cursor()
+    mycursor.execute("SELECT * FROM program")
+    result = mycursor.fetchall()
+    mycursor.close()
+    return result
