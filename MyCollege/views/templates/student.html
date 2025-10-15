@@ -154,7 +154,7 @@
   </div>
 </div>
 
-<table id="table" class="table table-striped">
+<table id="studentTable" class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
@@ -166,37 +166,9 @@
       <th>Actions</th>
     </tr>
   </thead>
-  <tbody>
-    {% for row in data %}
-    <tr>
-      <td>{{row[0]}}</td>
-      <td>{{row[1]}}</td>
-      <td>{{row[2]}}</td>
-      <td>{{row[3]}}</td>
-      <td>{{row[4]}}</td>
-      <td>{{row[5]}}</td>
-      <td>
-        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" edit-id="{{row[0]}}"
-          edit-fname="{{row[1]}}" edit-lname="{{row[2]}}" edit-year="{{row[3]}}" edit-gender="{{row[4]}}"
-          edit-course="{{row[5]}}">Edit</button>
-        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-          del-stud="{{row[0]}}">Delete</button>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-  <tfoot>
-    <tr>
-      <th>ID</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Course</th>
-      <th>Year</th>
-      <th>Gender</th>
-      <th>Actions</th>
-    </tr>
-  </tfoot>
+  <tbody></tbody>
 </table>
+
 {% endblock %}
 
 {% block scripts %}
