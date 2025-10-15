@@ -3,9 +3,12 @@
 $(document).ready(function () {
 
   const table = $('#programTable').DataTable({
+    processing: true,
+    serverSide: true,
     ajax: {
       url: '/program/data',
-      dataSrc: 'data'
+      dataSrc: 'data',
+      type: 'POST'
     },
     columns: [
       { data: 'code' },
