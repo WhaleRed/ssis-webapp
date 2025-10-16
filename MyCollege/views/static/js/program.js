@@ -1,7 +1,8 @@
 
 
 $(document).ready(function () {
-
+  let pendingData = null;
+  
   const table = $('#programTable').DataTable({
     processing: true,
     serverSide: true,
@@ -70,16 +71,26 @@ $(document).ready(function () {
 
   $('#submitProgEdit').click(function (e) {
     e.preventDefault();
+
+    pendingData = {
+    progInitial: $('#progCodeInitial').val(),
+    codeEdit: $('#progCodeEdit').val(),
+    nameEdit: $('#progNameEdit').val(),
+    colEdit: $('#progColCodeEdit').val()
+    }
+    
+    $('#confirmEditModal').modal('show');
+  });
+
+  $('#confirmEditSave').on('click', function () {
+    if (!pendingData) return;
+
     $.ajax({
       url: '/edit_program',
       method: 'POST',
-      data: {
-        progInitial: $('#progCodeInitial').val(),
-        codeEdit: $('#progCodeEdit').val(),
-        nameEdit: $('#progNameEdit').val(),
-        colEdit: $('#progColCodeEdit').val()
-      },
+      data: pendingData,
       success: function () {
+        $('#confirmEditModal').modal('hide');
         $('#editModal').modal('hide');
         showAlert('✏️ Program updated successfully!');
         table.ajax.reload(null, false);
