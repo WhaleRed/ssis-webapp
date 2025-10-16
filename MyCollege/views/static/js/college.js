@@ -1,5 +1,6 @@
 const editModal = document.getElementById('editModal');
 const deleteModal = document.getElementById('deleteModal');
+let pendingData = null;
 
 if (editModal) {
   editModal.addEventListener('show.bs.modal', function (event) {
@@ -85,15 +86,24 @@ $(document).ready(function () {
   $('#submitColEdit').on('click', function (e) {
     e.preventDefault();
 
-    const colInitial = $('#colCodeInitial').val();
-    const colCode = $('#colCodeEdit').val();
-    const colName = $('#colNameEdit').val();
+    pendingData = {
+    colInitial : $('#colCodeInitial').val(),
+    codeEdit : $('#colCodeEdit').val(),
+    nameEdit : $('#colNameEdit').val()
+    };
+
+    $('#confirmEditModal').modal('show');
+  });
+
+  $('#confirmEditSave').on('click', function () {
+    if (!pendingData) return;
 
     $.ajax({
       url: '/edit_college',
       type: 'POST',
-      data: { colInitial, codeEdit: colCode, nameEdit: colName },
+      data: pendingData,
       success: function () {
+        $('#confirmEditModal').modal('hide');
         $('#editModal').modal('hide');
         showAlert('✏️ College updated successfully!');
         table.ajax.reload(null, false);
