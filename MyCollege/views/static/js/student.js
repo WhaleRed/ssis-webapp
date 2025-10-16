@@ -1,6 +1,8 @@
 
 
 $(document).ready(function () {
+  let pendingData = null;
+
   const table = $('#studentTable').DataTable({
     processing: true,
     serverSide: true,
@@ -91,19 +93,27 @@ $(document).ready(function () {
 
   $('#submitStudEdit').click(function (e) {
     e.preventDefault();
+    pendingData = {
+      studInitial: $('#studInitial').val(),
+      idEdit: $('#studentIdEdit').val(),
+      fnameEdit: $('#firstNameEdit').val(),
+      lnameEdit: $('#lastNameEdit').val(),
+      courseEdit: $('#courseEdit').val(),
+      yearEdit: $('#yearEdit').val(),
+      genderEdit: $('#genderEdit').val()
+      }
+
+    $('#confirmEditModal').modal('show');
+    });
+
+  $('#confirmEditSave').on('click', function () {
+    if (!pendingData) return;
     $.ajax({
       url: '/edit_student',
       method: 'POST',
-      data: {
-        studInitial: $('#studInitial').val(),
-        idEdit: $('#studentIdEdit').val(),
-        fnameEdit: $('#firstNameEdit').val(),
-        lnameEdit: $('#lastNameEdit').val(),
-        courseEdit: $('#courseEdit').val(),
-        yearEdit: $('#yearEdit').val(),
-        genderEdit: $('#genderEdit').val()
-      },
+      data: pendingData,
       success: function () {
+        $('#confirmEditModal').modal('hide');
         $('#editModal').modal('hide');
         showAlert('✏️ Student updated successfully!');
         table.ajax.reload(null, false);
