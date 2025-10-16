@@ -23,6 +23,13 @@ $(document).ready(function () {
           `;
         }
       }
+    ],
+    columnDefs: [
+      {
+        targets: [3],
+        orderable: false,
+        searchable: false
+      }
     ]
   });
 

@@ -36,6 +36,13 @@ $(document).ready(function () {
           `;
         }
       }
+    ],
+    columnDefs: [
+      {
+        targets: [6],
+        orderable: false,
+        searchable: false
+      }
     ]
   });
 

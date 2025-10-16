@@ -42,23 +42,22 @@ def populateProgram(page):
 
   return result
 
-def getAllPrograms(search='', start=0, length=10):
+def getAllPrograms(search='', start=0, length=10, order_column='program_code', order_dir='asc'):
   db = get_db()
   mycursor = db.cursor()
-    
+  order_dir = 'ASC' if order_dir.lower() == 'asc' else 'DESC'
+
+  query = "SELECT * FROM program"
+  params = []
+
   if search:
-    mycursor.execute("""
-                     SELECT * FROM program 
-                     WHERE program_code ILIKE %s OR program_name ILIKE %s OR college_code ILIKE %s
-                     ORDER BY program_code
-                     OFFSET %s LIMIT %s
-                     """, (f'%{search}%', f'%{search}%', f'%{search}%', start, length))
-  else:
-    mycursor.execute("""
-                     SELECT * FROM program
-                     ORDER BY program_code
-                     OFFSET %s LIMIT %s
-                     """, (start, length))
+    query += " WHERE program_code ILIKE %s OR program_name ILIKE %s OR college_code ILIKE %s"
+    params = [f'%{search}%', f'%{search}%', f'%{search}%']
+  
+  query += f" ORDER BY {order_column} {order_dir} OFFSET %s LIMIT %s"
+  params.extend([start, length])
+
+  mycursor.execute(query, params)
 
   result = mycursor.fetchall()
   mycursor.close()

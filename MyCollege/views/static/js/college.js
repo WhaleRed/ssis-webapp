@@ -50,6 +50,13 @@ $(document).ready(function () {
           `;
         }
       }
+    ],
+    columnDefs: [
+      {
+        targets: [2],
+        orderable: false,
+        searchable: false
+      }
     ]
   });
 

@@ -11,7 +11,15 @@ def get_students_data():
         length = int(request.form.get('length', 10))
         search_value = request.form.get('search[value]', '')
 
-        retrieve = getAllStudents(search=search_value, start=start, length=length)
+        #DataTables parameter for serverside sorting
+        order_column_index = request.form.get('order[0][column]', '0')
+        order_dir = request.form.get('order[0][dir]', 'asc')
+
+        #Map columns from DataTables to DB
+        columns = ['student_id', 'first_name', 'last_name', 'year_level', 'gender', 'program_code']
+        order_column = columns[int(order_column_index)]
+
+        retrieve = getAllStudents(search=search_value, start=start, length=length, order_column=order_column, order_dir=order_dir)
         total_records = getStudentCount()
         filtered_records = getStudentCount(search=search_value)
 
