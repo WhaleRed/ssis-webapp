@@ -11,8 +11,16 @@ def get_programs_data():
         length = int(request.form.get('length', 10))
         search_value = request.form.get('search[value]', '')
 
+        #DataTables parameter for server side sorting
+        order_column_index = request.form.get('order[0][column]', '0')
+        order_dir = request.form.get('order[0][dir]', 'asc')
+
+        #Map columns from DataTable to DB
+        columns = ['program_code', 'program_name', 'college_code']
+        order_column = columns[int(order_column_index)]
+
         #Data retrieval
-        retrieve = getAllPrograms(search=search_value, start=start, length=length)
+        retrieve = getAllPrograms(search=search_value, start=start, length=length, order_column=order_column, order_dir=order_dir)
         total_records = getProgramCount()
         filtered_records = getProgramCount(search=search_value)
 
