@@ -1,4 +1,5 @@
 from MyCollege.db import get_db
+import re
 
 #functions take list as param
 
@@ -97,3 +98,10 @@ def getCourses():
   result = mycursor.fetchall()
   mycursor.close()
   return result
+
+def validateId(studentId):
+  pattern = r'^\d{4}-\d{4}$'
+  if not re.match(pattern, studentId):
+    return False
+  else:
+    return True
