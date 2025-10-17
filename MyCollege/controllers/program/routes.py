@@ -58,3 +58,12 @@ def delete_program():
     code = request.form['progCodeDelete']
     deleteProgram([code])
     return jsonify({'status': 'success', 'message': 'Program deleted successfully'})
+
+@program_bp.route('/get_colleges', methods=['GET'])
+def get_colleges():
+    try:
+        colleges = getAllColleges()
+        data = [{'code': c[0]} for c in colleges]
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
