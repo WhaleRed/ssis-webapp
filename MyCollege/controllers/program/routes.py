@@ -1,6 +1,8 @@
 from flask import request, jsonify
 from . import program_bp
 from MyCollege.models.program import *
+import psycopg2
+from psycopg2 import errors
 
 @program_bp.route('/program/data', methods=['POST'])
 def get_programs_data():
@@ -38,26 +40,49 @@ def get_programs_data():
 
 @program_bp.route('/add_program', methods=['POST'])
 def add_program():
-    progCode = request.form['progCodeAdd']
-    progName = request.form['progNameAdd']
-    colCode = request.form['colCodeAdd']
-    addProgram([progCode, progName, colCode])
-    return jsonify({'status': 'success', 'message': 'Program added successfully'})
+    try:
+        progCode = request.form['progCodeAdd']
+        progName = request.form['progNameAdd']
+        colCode = request.form['colCodeAdd']
+        addProgram([progCode, progName, colCode])
+        return jsonify({'status': 'success', 'message': 'Program added successfully'})
+    
+    #Exceptions
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'Program code or name already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/edit_program', methods=['POST'])
 def edit_program():
-    progInitial = request.form['progInitial']
-    progCode = request.form['codeEdit']
-    progName = request.form['nameEdit']
-    progColCode = request.form['colEdit']
-    editProgram([progCode, progName, progColCode, progInitial])
-    return jsonify({'status': 'success', 'message': 'Program edited successfully'})
+    try:
+        progInitial = request.form['progInitial']
+        progCode = request.form['codeEdit']
+        progName = request.form['nameEdit']
+        progColCode = request.form['colEdit']
+        editProgram([progCode, progName, progColCode, progInitial])
+        return jsonify({'status': 'success', 'message': 'Program edited successfully'})
+    #Exceptions
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'Program code or name already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/delete_program', methods=['POST'])
 def delete_program():
-    code = request.form['progCodeDelete']
-    deleteProgram([code])
-    return jsonify({'status': 'success', 'message': 'Program deleted successfully'})
+    try:
+        code = request.form['progCodeDelete']
+        deleteProgram([code])
+        return jsonify({'status': 'success', 'message': 'Program deleted successfully'})
+    #Exceptions
+    except psycopg2.errors.ForeignKeyViolation:
+        return jsonify({'success': False, 'message': 'Cannot delete this program because it is referenced by one or more students.'}), 400
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/get_colleges', methods=['GET'])
 def get_colleges():

@@ -91,7 +91,7 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error adding program: ' + xhr.responseText, 'danger');
+        handleAjaxError(xhr, 'Error adding program.');
       }
     });
   });
@@ -135,7 +135,7 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error updating Program: ' + xhr.responseText, 'danger');
+        handleAjaxError(xhr, 'Error updating program.');
       }
     });
   });
@@ -162,6 +162,17 @@ $(document).ready(function () {
       }
     });
   });
+
+  function handleAjaxError(xhr, defaultMsg) {
+    let msg = defaultMsg;
+    try {
+      const response = JSON.parse(xhr.responseText);
+      msg = response.message || msg;
+    } catch (e) {
+      msg = xhr.responseText;
+    }
+    showAlert('❌ ' + msg, 'danger');
+  }
 
   function showAlert(message, type = 'success') {
     const alert = $(`

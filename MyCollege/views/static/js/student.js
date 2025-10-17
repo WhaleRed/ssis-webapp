@@ -100,7 +100,14 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error adding student: ' + xhr.responseText, 'danger');
+        let msg = 'An unknown error occurred.';
+        try {
+          const response = JSON.parse(xhr.responseText);
+          msg = response.message || msg;
+        } catch (e) {
+          msg = xhr.responseText;
+        }
+        showAlert('❌ ' + msg, 'danger');
       }
     });
   });
@@ -146,7 +153,14 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error updating student: ' + xhr.responseText, 'danger');
+        let msg = 'Error updating student.';
+        try {
+          const response = JSON.parse(xhr.responseText);
+          msg = response.message || msg;
+        } catch (e) {
+          msg = xhr.responseText;
+        }
+        showAlert('❌ ' + msg, 'danger');
       }
     });
   });
