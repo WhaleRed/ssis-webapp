@@ -1,6 +1,8 @@
 from flask import request, jsonify
 from . import college_bp
 from MyCollege.models.college import *
+import psycopg2
+from psycopg2 import errors
 
 @college_bp.route('/college/data', methods=['POST'])
 def get_colleges_data():
@@ -41,11 +43,17 @@ def get_colleges_data():
 @college_bp.route('/add_college', methods=['POST'])
 def add_college():
     try:
-        colCode = request.form['colCodeAdd']
-        colName = request.form['colNameAdd']
+        colCode = request.form['colCodeAdd'].strip()
+        colName = request.form['colNameAdd'].strip()
 
+        
         addCollege([colCode, colName])
         return jsonify({'success': True, 'message': 'College added successfully'})
+    #Exceptions
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'College code or name already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
@@ -55,11 +63,19 @@ def add_college():
 def edit_college():
     try:
         colInitial = request.form['colInitial']
-        colCode = request.form['codeEdit']
-        colName = request.form['nameEdit']
+        colCode = request.form.get('codeEdit', '').strip()
+        colName = request.form.get('nameEdit', '').strip()
+
+        if not colCode or not colName:
+            return jsonify({'success': False, 'message': 'All fields are required.'}), 400
 
         editCollege([colCode, colName, colInitial])
         return jsonify({'success': True, 'message': 'College updated successfully'})
+    #Exceptions
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'College code or name already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
@@ -70,6 +86,9 @@ def delete_college():
         code = request.form['colCodeDelete']
         deleteCollege([code])
         return jsonify({'success': True, 'message': 'College deleted successfully'})
+    #Exceptions
+    except psycopg2.errors.ForeignKeyViolation:
+        return jsonify({'success': False, 'message': 'Cannot delete this college because it is referenced by one or more programs.'}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
     
