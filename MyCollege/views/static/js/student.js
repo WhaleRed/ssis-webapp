@@ -3,6 +3,28 @@
 $(document).ready(function () {
   let pendingData = null;
 
+  function loadCourseDropdown(selectedCourse = null) {
+    $.ajax({
+      url: '/get_courses',
+      method: 'GET',
+      success: function (courses) {
+        const dropdowns = $('#course, #courseEdit');
+        dropdowns.empty();
+        dropdowns.append('<option value="">Select Course</option>');
+
+        courses.forEach(code => {
+          const isSelected = selectedCourse === code ? 'selected' : '';
+          dropdowns.append(`<option value="${code}" ${isSelected}>${code}</option>`);
+        });
+      },
+      error: function (xhr) {
+        console.error('Error loading courses:', xhr.responseText);
+      }
+    });
+  }
+
+  loadCourseDropdown();
+
   const table = $('#studentTable').DataTable({
     processing: true,
     serverSide: true,
@@ -48,6 +70,10 @@ $(document).ready(function () {
     ]
   });
 
+  $('#addModal').on('show.bs.modal', function () {
+    loadCourseDropdown();
+  });
+
   // ADD
   $('#submitStudAdd').click(function (e) {
     e.preventDefault();
@@ -85,10 +111,11 @@ $(document).ready(function () {
     $('#studentIdEdit').val($(this).data('id'));
     $('#firstNameEdit').val($(this).data('fname'));
     $('#lastNameEdit').val($(this).data('lname'));
-    $('#courseEdit').val($(this).data('course'));
     $('#yearEdit').val($(this).data('year'));
     $('#genderEdit').val($(this).data('gender'));
     $('#editModal').modal('show');
+
+    loadCourseDropdown($(this).data('course'));
   });
 
   $('#submitStudEdit').click(function (e) {
@@ -101,10 +128,10 @@ $(document).ready(function () {
       courseEdit: $('#courseEdit').val(),
       yearEdit: $('#yearEdit').val(),
       genderEdit: $('#genderEdit').val()
-      }
+    }
 
     $('#confirmEditModal').modal('show');
-    });
+  });
 
   $('#confirmEditSave').on('click', function () {
     if (!pendingData) return;
@@ -147,7 +174,7 @@ $(document).ready(function () {
     });
   });
 
-    function showAlert(message, type = 'success') {
+  function showAlert(message, type = 'success') {
     const alert = $(`
       <div class="alert alert-${type} alert-dismissible fade show mt-3" role="alert">
         ${message}
