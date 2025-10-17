@@ -87,3 +87,13 @@ def getStudentCount(search=''):
   mycursor.close()
 
   return result
+
+def getCourses():
+  db = get_db()
+  mycursor = db.cursor()
+
+  mycursor.execute("SELECT program_code FROM program")
+
+  result = mycursor.fetchall()
+  mycursor.close()
+  return result

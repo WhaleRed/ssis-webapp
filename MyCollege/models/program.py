@@ -79,3 +79,13 @@ def getProgramCount(search=''):
   mycursor.close()
 
   return count
+
+def getAllColleges():
+  db = get_db()
+  mycrusor = db.cursor()
+
+  mycrusor.execute("SELECT college_code FROM college")
+
+  result = mycrusor.fetchall()
+  mycrusor.close()
+  return result
