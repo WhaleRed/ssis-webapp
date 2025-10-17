@@ -78,7 +78,7 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error adding college: ' + xhr.responseText, 'danger');
+        handleAjaxError(xhr, 'Error adding college.');
       }
     });
   });
@@ -87,9 +87,9 @@ $(document).ready(function () {
     e.preventDefault();
 
     pendingData = {
-    colInitial : $('#colCodeInitial').val(),
-    codeEdit : $('#colCodeEdit').val(),
-    nameEdit : $('#colNameEdit').val()
+      colInitial: $('#colCodeInitial').val(),
+      codeEdit: $('#colCodeEdit').val(),
+      nameEdit: $('#colNameEdit').val()
     };
 
     $('#confirmEditModal').modal('show');
@@ -109,7 +109,7 @@ $(document).ready(function () {
         table.ajax.reload(null, false);
       },
       error: function (xhr) {
-        showAlert('❌ Error updating college: ' + xhr.responseText, 'danger');
+        handleAjaxError(xhr, 'Error updating college.');
       }
     });
   });
@@ -132,6 +132,17 @@ $(document).ready(function () {
       }
     });
   });
+
+  function handleAjaxError(xhr, defaultMsg) {
+    let msg = defaultMsg;
+    try {
+      const response = JSON.parse(xhr.responseText);
+      msg = response.message || msg;
+    } catch (e) {
+      msg = xhr.responseText;
+    }
+    showAlert('❌ ' + msg, 'danger');
+  }
 
   function showAlert(message, type = 'success') {
     const alert = $(`
