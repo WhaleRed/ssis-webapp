@@ -77,3 +77,12 @@ def delete_student():
     student = [studid]
     deleteStudent(student)
     return jsonify({"message": "Student deleted successfully"})
+
+@student_bp.route('/get_courses')
+def get_all_courses():
+    try:
+        courses = getCourses()
+        # Return plain list of course codes
+        return jsonify([c[0] for c in courses])
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
