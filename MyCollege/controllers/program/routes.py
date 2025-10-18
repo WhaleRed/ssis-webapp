@@ -3,8 +3,10 @@ from . import program_bp
 from MyCollege.models.program import *
 import psycopg2
 from psycopg2 import errors
+from flask_login import login_required
 
 @program_bp.route('/program/data', methods=['POST'])
+@login_required
 def get_programs_data():
     try:
         #DataTables Parameter for server side
@@ -39,6 +41,7 @@ def get_programs_data():
         return jsonify({'data': [], 'error': str(e)})
 
 @program_bp.route('/add_program', methods=['POST'])
+@login_required
 def add_program():
     try:
         progCode = request.form['progCodeAdd']
@@ -56,6 +59,7 @@ def add_program():
         return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/edit_program', methods=['POST'])
+@login_required
 def edit_program():
     try:
         progInitial = request.form['progInitial']
@@ -73,6 +77,7 @@ def edit_program():
         return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/delete_program', methods=['POST'])
+@login_required
 def delete_program():
     try:
         code = request.form['progCodeDelete']
@@ -85,6 +90,7 @@ def delete_program():
         return jsonify({'success': False, 'message': str(e)})
 
 @program_bp.route('/get_colleges', methods=['GET'])
+@login_required
 def get_colleges():
     try:
         colleges = getAllColleges()
