@@ -3,8 +3,10 @@ from . import student_bp
 from MyCollege.models.student import *
 import psycopg2
 from psycopg2 import errors
+from flask_login import login_required
 
 @student_bp.route('/student/data', methods=['POST'])
+@login_required
 def get_students_data():
     try:
         #DataTables Param for server side
@@ -45,6 +47,7 @@ def get_students_data():
 
 
 @student_bp.route('/add_student', methods=['POST'])
+@login_required
 def add_student():
     try:
         studId = request.form['idAdd']
@@ -74,6 +77,7 @@ def add_student():
 
 
 @student_bp.route('/edit_student', methods=['POST'])
+@login_required
 def edit_student():
     try:
         studInitial = request.form['studInitial']
@@ -103,6 +107,7 @@ def edit_student():
 
 
 @student_bp.route('/delete_student', methods=['POST'])
+@login_required
 def delete_student():
     try:
         studid = request.form['studDelete']
@@ -113,6 +118,7 @@ def delete_student():
         return jsonify({'success': False, 'message': str(e)})
 
 @student_bp.route('/get_courses')
+@login_required
 def get_all_courses():
     try:
         courses = getCourses()
