@@ -1,10 +1,12 @@
 from flask import request, jsonify
+from flask_login import login_required
 from . import college_bp
 from MyCollege.models.college import *
 import psycopg2
 from psycopg2 import errors
 
 @college_bp.route('/college/data', methods=['POST'])
+@login_required
 def get_colleges_data():
     try:
         #DataTables Parameter for server side pagination and search
@@ -41,6 +43,7 @@ def get_colleges_data():
 
 
 @college_bp.route('/add_college', methods=['POST'])
+@login_required
 def add_college():
     try:
         colCode = request.form['colCodeAdd'].strip()
@@ -60,6 +63,7 @@ def add_college():
 
 
 @college_bp.route('/edit_college', methods=['POST'])
+@login_required
 def edit_college():
     try:
         colInitial = request.form['colInitial']
@@ -81,6 +85,7 @@ def edit_college():
 
 
 @college_bp.route('/delete_college', methods=['POST'])
+@login_required
 def delete_college():
     try:
         code = request.form['colCodeDelete']
