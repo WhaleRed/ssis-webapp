@@ -57,6 +57,9 @@ def add_student():
         year = request.form['yearAdd']
         gender = request.form['genderAdd']
 
+        if not studId or not fname or not lname or not course or not year or not gender:
+            return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+
         if not validateId(studId):
             return jsonify({
                 'success': False,
@@ -87,6 +90,9 @@ def edit_student():
         course = request.form['courseEdit']
         year = request.form['yearEdit']
         gender = request.form['genderEdit']
+
+        if not studId or not fname or not lname or not course or not year or not gender:
+            return jsonify({'success': False, 'message': 'All fields are required!'}), 400
 
         if not validateId(studId):
             return jsonify({
