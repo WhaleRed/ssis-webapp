@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 from config import SECRET_KEY
 
 login_manager = LoginManager()
@@ -7,6 +8,8 @@ login_manager = LoginManager()
 def create_app():
   app = Flask(__name__, template_folder="views/templates", static_folder="views/static")
   app.secret_key = SECRET_KEY
+
+  CSRFProtect(app)
 
   # Initialize login manager
   login_manager.init_app(app)
