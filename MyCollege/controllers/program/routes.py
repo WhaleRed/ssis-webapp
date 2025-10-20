@@ -47,6 +47,10 @@ def add_program():
         progCode = request.form['progCodeAdd']
         progName = request.form['progNameAdd']
         colCode = request.form['colCodeAdd']
+
+        if not progCode or not progName or not colCode:
+            return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+        
         addProgram([progCode, progName, colCode])
         return jsonify({'status': 'success', 'message': 'Program added successfully'})
     
@@ -66,6 +70,10 @@ def edit_program():
         progCode = request.form['codeEdit']
         progName = request.form['nameEdit']
         progColCode = request.form['colEdit']
+
+        if not progCode or not progName or not progColCode:
+            return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+        
         editProgram([progCode, progName, progColCode, progInitial])
         return jsonify({'status': 'success', 'message': 'Program edited successfully'})
     #Exceptions
