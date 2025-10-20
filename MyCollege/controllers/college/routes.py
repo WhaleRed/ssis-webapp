@@ -49,6 +49,8 @@ def add_college():
         colCode = request.form['colCodeAdd'].strip()
         colName = request.form['colNameAdd'].strip()
 
+        if not colCode or not colName:
+            return jsonify({'success': False, 'message': 'All fields are required!'}), 400
         
         addCollege([colCode, colName])
         return jsonify({'success': True, 'message': 'College added successfully'})
