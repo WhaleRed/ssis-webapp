@@ -35,6 +35,7 @@
 
         <!-- Add Form-->
         <form action="{{url_for('program.add_program')}}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <div class="form-group">
             <label for="progCode">Program Code</label>
             <input class="form-control" id="progCode" name="progCodeAdd">
@@ -79,6 +80,7 @@
 
         <!-- Edit Form-->
         <form action="{{url_for('program.edit_program')}}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <input type="hidden" id="progCodeInitial" name="progInitial">
           <div class="form-group">
             <label for="progCodeEdit">Program Code</label>
@@ -121,6 +123,7 @@
       </div>
 
       <form action="{{url_for('program.delete_program')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" id="progCodeDelete" name="progCodeDelete">
         <!-- Footer -->
         <div class="modal-footer">

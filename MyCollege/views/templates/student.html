@@ -35,6 +35,7 @@
 
         <!-- Add Form-->
         <form action="{{url_for('student.add_student')}}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <div class="form-group">
             <label for="studentId">ID</label>
             <input class="form-control" id="studentId" name="idAdd">
@@ -99,6 +100,7 @@
 
         <!-- Edit Form-->
         <form action="{{url_for('student.edit_student')}}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <input type="hidden" id="studInitial" name="studInitial">
           <div class="form-group">
             <label for="studentIdEdit">ID</label>
@@ -164,6 +166,7 @@
       </div>
 
       <form action="{{url_for('student.delete_student')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" id="studDelete" name="studDelete">
         <!-- Footer -->
         <div class="modal-footer">
