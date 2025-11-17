@@ -28,7 +28,7 @@ def get_programs_data():
         total_records = getProgramCount()
         filtered_records = getProgramCount(search=search_value)
 
-        data = [{'code': p[0], 'name': p[1], 'college': p[2]} for p in retrieve]
+        data = [{'code': p['program_code'], 'name': p['program_name'], 'college': p['college_code']} for p in retrieve]
 
         return jsonify ({
             'draw': draw,
