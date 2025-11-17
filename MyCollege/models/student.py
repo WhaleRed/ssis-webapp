@@ -1,107 +1,85 @@
-from MyCollege.db import get_db
+from MyCollege.supabase import get_db
 import re
 
-#functions take list as param
+# functions take list as param
 
 def addStudent(student):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    db.table("student").insert({
+        "student_id": student[0],
+        "first_name": student[1],
+        "last_name": student[2],
+        "year_level": student[3],
+        "gender": student[4],
+        "program_code": student[5]
+    }).execute()
 
-  sql = "INSERT INTO student(student_id, first_name, last_name, year_level, gender, program_code) VALUES (%s, %s, %s, %s, %s, %s)"
-  mycursor.execute(sql, student)
-  db.commit()
 
-  mycursor.close()
+def deleteStudent(idnum):
+    db = get_db()
+    db.table("student").delete().eq("student_id", idnum).execute()
 
-def deleteStudent(idnum):           
-  db = get_db()
-  mycursor = db.cursor()
-
-  sql = "DELETE FROM student WHERE student_id = %s"
-  mycursor.execute(sql, idnum)
-  db.commit()
-
-  mycursor.close()
 
 def editStudent(student):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    db.table("student").update({
+        "student_id": student[0],
+        "first_name": student[1],
+        "last_name": student[2],
+        "year_level": student[3],
+        "gender": student[4],
+        "program_code": student[5]
+    }).eq("student_id", student[6]).execute()
 
-  sql = "UPDATE student SET student_id = %s, first_name = %s, last_name = %s, year_level = %s, gender = %s, program_code = %s WHERE student_id =%s"
-  mycursor.execute(sql, student)
-  db.commit()
-
-  mycursor.close()
 
 def populateStudent(page):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    offset = (page - 1) * 50
+    response = db.table("student").select("*").offset(offset).limit(50).execute()
+    return response.data  # list of dicts
 
-  offset = (page - 1) * 50
-  sql = "SELECT * FROM student OFFSET %s LIMIT 50"
-  mycursor.execute(sql, (offset,))
-  result = mycursor.fetchall()
-
-  return result
 
 def getAllStudents(search='', start=0, length=10, order_column='student_id', order_dir='asc'):
     db = get_db()
-    mycursor = db.cursor()
-    order_dir = 'ASC' if order_dir.lower() == 'asc' else 'DESC'
+    order_desc = True if order_dir.lower() == "desc" else False
 
-    query = "SELECT * FROM student"
-    params = []
+    query = db.table("student").select("*")
+
     if search:
-      if search.isdigit() and len(search) == 1:
-        query += " WHERE CAST(year_level AS TEXT) ILIKE %s "
-        params = [f'%{search}%']
-      else:
-        query += " WHERE student_id ILIKE %s OR first_name ILIKE %s OR last_name ILIKE %s OR gender ILIKE %s OR program_code ILIKE %s "
-        params = [f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%',]
+        if search.isdigit() and len(search) == 1:
+            query = query.filter("year_level", "ilike", f"%{search}%")
+        else:
+            query = query.or_(
+                f"student_id.ilike.*{search}*,first_name.ilike.*{search}*,last_name.ilike.*{search}*,gender.ilike.*{search}*,program_code.ilike.*{search}*"
+            )
 
-    query += f" ORDER BY {order_column} {order_dir} OFFSET %s LIMIT %s"
-    params.extend([start, length])
-    
-    mycursor.execute(query, params)
-    result = mycursor.fetchall()
-    mycursor.close()
-    return result
+    response = query.order(order_column, desc=order_desc).offset(start).limit(length).execute()
+    return response.data  # list of dicts
+
 
 def getStudentCount(search=''):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    query = db.table("student").select("student_id", count="exact")
 
-  if search:
-    if search.isdigit() and len(search) == 1:
-      mycursor.execute("SELECT COUNT (*) FROM student WHERE CAST(year_level AS TEXT) ILIKE %s", (f'%{search}%',))
-    else:
-      mycursor.execute("""
-                      SELECT COUNT(*) FROM student
-                      WHERE student_id ILIKE %s OR first_name ILIKE %s OR
-                      last_name ILIKE %s OR
-                      gender ILIKE %s OR program_code ILIKE %s
-                      """, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
-  else:
-    mycursor.execute("SELECT COUNT(*) FROM student")
+    if search:
+        if search.isdigit() and len(search) == 1:
+            query = query.filter("year_level", "ilike", f"%{search}%")
+        else:
+            query = query.or_(
+                f"student_id.ilike.*{search}*,first_name.ilike.*{search}*,last_name.ilike.*{search}*,gender.ilike.*{search}*,program_code.ilike.*{search}*"
+            )
 
-  result = mycursor.fetchone()[0]
-  mycursor.close()
+    response = query.execute()
+    return response.count or 0
 
-  return result
+
 
 def getCourses():
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    response = db.table("program").select("program_code").execute()
+    return [row["program_code"] for row in response.data]
 
-  mycursor.execute("SELECT program_code FROM program")
-
-  result = mycursor.fetchall()
-  mycursor.close()
-  return result
 
 def validateId(studentId):
-  pattern = r'^\d{4}-\d{4}$'
-  if not re.match(pattern, studentId):
-    return False
-  else:
-    return True
+    pattern = r'^\d{4}-\d{4}$'
+    return bool(re.match(pattern, studentId))

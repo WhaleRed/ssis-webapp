@@ -1,80 +1,58 @@
-from MyCollege.db import get_db
+from MyCollege.supabase import get_db
+
 
 def addCollege(college):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    db.table("college").insert({
+        "college_code": college[0],
+        "college_name": college[1]
+    }).execute()
 
-  sql = "INSERT INTO college(college_code, college_name) VALUES (%s, %s)"
-  mycursor.execute(sql, college)
-  db.commit()
 
-  mycursor.close()
+def deleteCollege(college_code):
+    db = get_db()
+    db.table("college").delete().eq("college_code", college_code).execute()
 
-def deleteCollege(college_code): 
-  db = get_db()
-  mycursor = db.cursor()
 
-  sql = "DELETE FROM college WHERE college_code = %s"
-  mycursor.execute(sql, college_code)
-  db.commit()
-
-  mycursor.close()
-  
 def editCollege(college):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    db.table("college").update({
+        "college_code": college[0],
+        "college_name": college[1]
+    }).eq("college_code", college[2]).execute()
 
-  sql = "UPDATE college SET college_code = %s, college_name = %s WHERE college_code = %s"
-  mycursor.execute(sql , college)
-  db.commit()
-
-  mycursor.close()
 
 def populateCollege(page):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    offset = (page - 1) * 10
+    response = db.table("college").select("*").offset(offset).limit(10).execute()
+    return response.data  # list of dictionaries
 
-  offset = (page - 1) * 10
-  sql = "SELECT * FROM college OFFSET %s LIMIT 10"
-  mycursor.execute(sql, (offset,))
-  result = mycursor.fetchall()
-
-  return result
 
 def getAllColleges(search='', start=0, length=10, order_column='college_code', order_dir='asc'):
-  db = get_db()
-  mycursor = db.cursor()
-  order_dir = 'ASC' if order_dir.lower() == 'asc' else 'DESC'
+    db = get_db()
+    order_desc = True if order_dir.lower() == "desc" else False
 
-  query = "SELECT * FROM college"
-  params = []
+    query = db.table("college").select("*")
 
-  if search:
-    query += " WHERE college_code ILIKE %s OR college_name ILIKE %s"
-    params = [f'%{search}%', f'%{search}%']
-  
-  query += f" ORDER BY {order_column} {order_dir} OFFSET %s LIMIT %s"
-  params.extend([start, length])
+    if search:
+        query = query.or_(
+            f"college_code.ilike.%{search}%,college_name.ilike.%{search}%"
+        )
 
-  mycursor.execute(query, params)
-  result = mycursor.fetchall()
-  mycursor.close()
+    response = query.order(order_column, desc=order_desc).offset(start).limit(length).execute()
 
-  return result
+    return [{"code": c["college_code"], "name": c["college_name"]} for c in response.data]
+
 
 def getCollegeCount(search=''):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    query = db.table("college").select("college_code", count="exact")
 
-  if search:
-    mycursor.execute("""
-                     SELECT COUNT(*) FROM college 
-                     WHERE college_code ILIKE %s OR college_name ILIKE %s
-                     """, (f'%{search}%', f'%{search}%'))
-  else:
-    mycursor.execute("SELECT COUNT(*) FROM college")
-  
-  count = mycursor.fetchone()[0]
-  mycursor.close()
+    if search:
+        query = query.or_(
+            f"college_code.ilike.%{search}%,college_name.ilike.%{search}%"
+        )
 
-  return count
+    response = query.execute()
+    return response.count or 0
