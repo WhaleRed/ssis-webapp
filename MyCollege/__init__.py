@@ -1,13 +1,19 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
-from config import SECRET_KEY
+from config import SECRET_KEY, DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, DB_CON_STR
 
 login_manager = LoginManager()
 
 def create_app():
   app = Flask(__name__, template_folder="views/templates", static_folder="views/static")
   app.secret_key = SECRET_KEY
+  app.config['DB_NAME'] = DB_NAME
+  app.config['DB_USER'] = DB_USER
+  app.config['DB_PASS'] = DB_PASS
+  app.config['DB_HOST'] = DB_HOST
+  app.config['DB_PORT'] = DB_PORT
+  app.config['DB_CON_STR'] = DB_CON_STR
 
   CSRFProtect(app)
 
