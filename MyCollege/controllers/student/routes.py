@@ -28,12 +28,12 @@ def get_students_data():
         filtered_records = getStudentCount(search=search_value)
 
         data = [{
-            'id': s['student_id'],
-            'fname': s['first_name'],
-            'lname': s['last_name'],
-            'year': s['year_level'],
-            'gender': s['gender'],
-            'course': s['program_code']
+            'id': s[0],
+            'fname': s[1],
+            'lname': s[2],
+            'year': s[3],
+            'gender': s[4],
+            'course': s[5]
         } for s in retrieve]
 
         return jsonify ({

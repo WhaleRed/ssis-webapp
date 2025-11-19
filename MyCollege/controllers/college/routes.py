@@ -9,30 +9,35 @@ from psycopg2 import errors
 @login_required
 def get_colleges_data():
     try:
+        #DataTables Parameter for server side pagination and search
         draw = int(request.form.get('draw', 1))
         start = int(request.form.get('start', 0))
         length = int(request.form.get('length', 10))
         search_value = request.form.get('search[value]', '')
 
+        #DataTables Parameter for server side sorting
         order_column_index = request.form.get('order[0][column]', '0')
         order_dir = request.form.get('order[0][dir]', 'asc')
+
+        #Map columns from DataTables to DB
         columns = ['college_code', 'college_name']
         order_column = columns[int(order_column_index)]
 
-        # fetch data
+
+        #Data retrieval
         retrieve = getAllColleges(search=search_value, start=start, length=length, order_column=order_column, order_dir=order_dir)
         total_records = getCollegeCount()
         filtered_records = getCollegeCount(search=search_value)
 
-        # map dictionary keys
-        data = [{'code': c['code'], 'name': c['name']} for c in retrieve]
+        data = [{'code': c[0], 'name': c[1]} for c in retrieve]
 
-        return jsonify({
+        return jsonify ({
             'draw': draw,
             'recordsTotal': total_records,
             'recordsFiltered': filtered_records,
             'data': data
         })
+
     except Exception as e:
         return jsonify({'data': [], 'error': str(e)})
 
