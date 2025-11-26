@@ -34,6 +34,15 @@ $(document).ready(function () {
       type: 'POST'
     },
     columns: [
+      {
+        data: 'photo',
+        render: function (data, type, row) {
+          const url = data;
+          return `<img src="${url}" 
+                      class="img-thumbnail" 
+                      style="width: 50px; height: 50px; object-fit: cover;">`;
+        }
+      },
       { data: 'id' },
       { data: 'fname' },
       { data: 'lname' },
@@ -63,12 +72,13 @@ $(document).ready(function () {
     ],
     columnDefs: [
       {
-        targets: [6],
+        targets: [0, 7],
         orderable: false,
         searchable: false
       }
     ]
   });
+
 
   $('#addModal').on('show.bs.modal', function () {
     loadCourseDropdown();
@@ -76,41 +86,34 @@ $(document).ready(function () {
 
   // ADD
   $('#submitStudAdd').click(function (e) {
-    e.preventDefault();
-    $.ajax({
-      url: '/add_student',
-      method: 'POST',
-      data: {
-        idAdd: $('#studentId').val(),
-        firstNameAdd: $('#firstName').val(),
-        lastNameAdd: $('#lastName').val(),
-        courseAdd: $('#course').val(),
-        yearAdd: $('#year').val(),
-        genderAdd: $('#gender').val()
-      },
-      success: function () {
-        $('#addModal').modal('hide');
-        $('#idAdd').val('');
-        $('#firstNameAdd').val('');
-        $('#lastNameAdd').val('');
-        $('#courseAdd').val('');
-        $('#yearAdd').val('');
-        $('#genderAdd').val('');
-        showAlert('✅ Student added successfully!');
-        table.ajax.reload(null, false);
-      },
-      error: function (xhr) {
-        let msg = 'An unknown error occurred.';
-        try {
-          const response = JSON.parse(xhr.responseText);
-          msg = response.message || msg;
-        } catch (e) {
-          msg = xhr.responseText;
-        }
-        showAlert('❌ ' + msg, 'danger');
-      }
-    });
+      e.preventDefault();
+
+      const form = $('#addStudentForm')[0];
+      const formData = new FormData(form);
+
+      $.ajax({
+          url: '/add_student',
+          method: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+              $('#addModal').modal('hide');
+              form.reset();
+              showAlert('✅ Student added successfully!');
+              table.ajax.reload(null, false);
+          },
+          error: function (xhr) {
+              let msg = 'An unknown error occurred.';
+              try {
+                  const response = JSON.parse(xhr.responseText);
+                  msg = response.message || msg;
+              } catch (e) {}
+              showAlert('❌ ' + msg, 'danger');
+          }
+      });
   });
+
 
   // EDIT
   $(document).on('click', '.edit-btn', function () {
