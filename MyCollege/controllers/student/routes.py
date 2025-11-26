@@ -4,6 +4,8 @@ from MyCollege.models.student import *
 import psycopg2
 from psycopg2 import errors
 from flask_login import login_required
+from ...supabase import supabase
+import uuid
 
 @student_bp.route('/student/data', methods=['POST'])
 @login_required
@@ -33,7 +35,8 @@ def get_students_data():
             'lname': s[2],
             'year': s[3],
             'gender': s[4],
-            'course': s[5]
+            'course': s[5],
+            'photo': s[6]
         } for s in retrieve]
 
         return jsonify ({
@@ -47,36 +50,42 @@ def get_students_data():
 
 
 @student_bp.route('/add_student', methods=['POST'])
-@login_required
 def add_student():
     try:
-        studId = request.form['idAdd']
-        fname = request.form['firstNameAdd']
-        lname = request.form['lastNameAdd']
-        course = request.form['courseAdd']
-        year = request.form['yearAdd']
-        gender = request.form['genderAdd']
+        studId = request.form.get('idAdd')
+        fname = request.form.get('firstNameAdd')
+        lname = request.form.get('lastNameAdd')
+        course = request.form.get('courseAdd')
+        year = request.form.get('yearAdd')
+        gender = request.form.get('genderAdd')
+        photo = request.files.get('photoAdd')
 
-        if not studId or not fname or not lname or not course or not year or not gender:
+        if not all([studId, fname, lname, course, year, gender]):
             return jsonify({'success': False, 'message': 'All fields are required!'}), 400
 
-        if not validateId(studId):
-            return jsonify({
-                'success': False,
-                'message': ' Invalid Student ID format. Use YYYY-NNNN (e.g., 2025-0241).'
-            }), 400
+        # Default photo URL
+        photo_url = "https://vgygdysxpdxoodvwmvwj.supabase.co/storage/v1/object/public/student-img/default.jpg"
 
-        student = [studId, fname, lname, year, gender, course]
+        # Upload photo if provided
+        if photo:
+            unique_filename = f"{uuid.uuid4()}_{photo.filename}"
+            file_path = f"{studId}/{unique_filename}"
+
+            res = supabase.storage.from_("student-img").upload(
+                file_path,
+                photo.read(),
+                file_options={"content-type": photo.mimetype}
+            )
+
+            photo_url = supabase.storage.from_("student-img").get_public_url(file_path)
+
+        student = [studId, fname, lname, year, gender, course, photo_url]
         addStudent(student)
-        return jsonify({"message": "Student added successfully"})
-    #Exceptions
 
-    except psycopg2.errors.UniqueViolation:
-        return jsonify({'success': False, 'message': 'Student ID# already exists!'}), 400
-    except psycopg2.errors.NotNullViolation:
-        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+        return jsonify({"message": "Student added successfully"})
+
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 
 @student_bp.route('/edit_student', methods=['POST'])
