@@ -5,13 +5,11 @@ import re
 
 def addStudent(student):
   db = get_db()
-  mycursor = db.cursor()
-
-  sql = "INSERT INTO student(student_id, first_name, last_name, year_level, gender, program_code) VALUES (%s, %s, %s, %s, %s, %s)"
-  mycursor.execute(sql, student)
+  cursor = db.cursor()
+  sql = "INSERT INTO student(student_id, first_name, last_name, year_level, gender, program_code, photo_url) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+  cursor.execute(sql, student)
   db.commit()
-
-  mycursor.close()
+  cursor.close()
 
 def deleteStudent(idnum):           
   db = get_db()
