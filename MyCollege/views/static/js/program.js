@@ -3,6 +3,16 @@
 $(document).ready(function () {
   let pendingData = null;
 
+  function showLoading() {
+    $('#loadingOverlay').fadeIn(100);
+    $('button').prop('disabled', true);
+  }
+
+  function hideLoading() {
+    $('#loadingOverlay').fadeOut(100);
+    $('button').prop('disabled', false);
+  }
+
   function loadCollegeDropdown(selectedCode = null) {
     $.ajax({
       url: '/get_colleges',
@@ -82,8 +92,16 @@ $(document).ready(function () {
         progNameAdd: $('#progName').val(),
         colCodeAdd: $('#colCode').val()
       },
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#addModal').modal('hide');
+      },
+
+      success: function () {
         $('#progCodeAdd').val('');
         $('#progNameAdd').val('');
         $('#colCodeAdd').val('');
@@ -128,9 +146,17 @@ $(document).ready(function () {
       url: '/edit_program',
       method: 'POST',
       data: pendingData,
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#confirmEditModal').modal('hide');
         $('#editModal').modal('hide');
+      },
+
+      success: function () {
         showAlert('✏️ Program updated successfully!');
         table.ajax.reload(null, false);
       },
@@ -152,8 +178,16 @@ $(document).ready(function () {
       url: '/delete_program',
       method: 'POST',
       data: { progCodeDelete: $('#progCodeDelete').val() },
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#deleteModal').modal('hide');
+      },
+
+      success: function () {
         showAlert('🗑️ Program deleted successfully!');
         table.ajax.reload(null, false);
       },
