@@ -66,3 +66,13 @@
   border-radius: 15px;
   padding: 5px;
 }
+
+#loadingOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
