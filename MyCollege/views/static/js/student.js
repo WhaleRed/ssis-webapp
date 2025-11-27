@@ -3,6 +3,17 @@
 $(document).ready(function () {
   let pendingData = null;
 
+  function showLoading() {
+    $('#loadingOverlay').fadeIn(100);
+    $('button').prop('disabled', true);
+  }
+
+  function hideLoading() {
+    $('#loadingOverlay').fadeOut(100);
+    $('button').prop('disabled', false);
+  }
+
+
   function loadCourseDropdown(selectedCourse = null) {
     $.ajax({
       url: '/get_courses',
@@ -89,6 +100,19 @@ $(document).ready(function () {
   $('#submitStudAdd').click(function (e) {
       e.preventDefault();
 
+      const fileInput = $('#photo')[0];
+      const file = fileInput.files[0];
+
+      if (file) {
+          const maxSize = 5 * 1024 * 1024;
+          if (file.size > maxSize) {
+              showAlert('❌ File size cannot exceed 5 MB.', 'danger');
+              fileInput.value = "";
+              $('#addModal').modal('hide');
+              return;
+          }
+      }
+
       const form = $('#addStudentForm')[0];
       const formData = new FormData(form);
 
@@ -98,8 +122,16 @@ $(document).ready(function () {
           data: formData,
           processData: false,
           contentType: false,
+
+          beforeSend: function () {
+            showLoading();
+          },
+          complete: function () {
+            hideLoading();
+            $('#addModal').modal('hide');
+          },
+
           success: function () {
-              $('#addModal').modal('hide');
               form.reset();
               showAlert('✅ Student added successfully!');
               table.ajax.reload(null, false);
@@ -132,6 +164,18 @@ $(document).ready(function () {
 
   $('#submitStudEdit').click(function (e) {
     e.preventDefault();
+    const fileInput = $('#photoEdit')[0];
+    const file = fileInput.files[0];
+
+    if (file) {
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            showAlert('❌ File size cannot exceed 5 MB.', 'danger');
+            fileInput.value = "";
+            $('#editModal').modal('hide');
+            return;
+        }
+    }
     pendingData = {
       studInitial: $('#studInitial').val(),
       idEdit: $('#studentIdEdit').val(),
@@ -167,9 +211,17 @@ $(document).ready(function () {
           data: formData,
           processData: false,
           contentType: false,
+
+          beforeSend: function () {
+            showLoading();
+          },
+          complete: function () {
+            hideLoading();
+            $('#confirmEditModal').modal('hide');
+            $('#editModal').modal('hide');
+          },
+
           success: function () {
-              $('#confirmEditModal').modal('hide');
-              $('#editModal').modal('hide');
               showAlert('✏️ Student updated successfully!');
               table.ajax.reload(null, false);
           },
@@ -196,8 +248,16 @@ $(document).ready(function () {
       url: '/delete_student',
       method: 'POST',
       data: { studDelete: $('#studDelete').val() },
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#deleteModal').modal('hide');
+      },
+
+      success: function () {
         showAlert('🗑️ Student deleted successfully!');
         table.ajax.reload(null, false);
       },
