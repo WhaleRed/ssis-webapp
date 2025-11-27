@@ -22,14 +22,14 @@ def deleteStudent(idnum):
   mycursor.close()
 
 def editStudent(student):
-  db = get_db()
-  mycursor = db.cursor()
+    db = get_db()
+    mycursor = db.cursor()
 
-  sql = "UPDATE student SET student_id = %s, first_name = %s, last_name = %s, year_level = %s, gender = %s, program_code = %s WHERE student_id =%s"
-  mycursor.execute(sql, student)
-  db.commit()
+    sql = "UPDATE student SET student_id = %s, first_name = %s, last_name = %s, year_level = %s, gender = %s, program_code = %s, photo_url = %s WHERE student_id = %s"
 
-  mycursor.close()
+    mycursor.execute(sql, student)
+    db.commit()
+    mycursor.close()
 
 def populateStudent(page):
   db = get_db()
