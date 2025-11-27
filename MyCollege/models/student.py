@@ -1,4 +1,4 @@
-from MyCollege.db import get_db
+from MyCollege.db import get_db, close_db
 import re
 
 #functions take list as param
@@ -10,6 +10,7 @@ def addStudent(student):
   cursor.execute(sql, student)
   db.commit()
   cursor.close()
+  close_db()
 
 def deleteStudent(idnum):           
   db = get_db()
@@ -20,6 +21,7 @@ def deleteStudent(idnum):
   db.commit()
 
   mycursor.close()
+  close_db()
 
 def editStudent(student):
     db = get_db()
@@ -30,6 +32,7 @@ def editStudent(student):
     mycursor.execute(sql, student)
     db.commit()
     mycursor.close()
+    close_db()
 
 def populateStudent(page):
   db = get_db()
@@ -39,6 +42,7 @@ def populateStudent(page):
   sql = "SELECT * FROM student OFFSET %s LIMIT 50"
   mycursor.execute(sql, (offset,))
   result = mycursor.fetchall()
+  close_db()
 
   return result
 
@@ -63,6 +67,7 @@ def getAllStudents(search='', start=0, length=10, order_column='student_id', ord
     mycursor.execute(query, params)
     result = mycursor.fetchall()
     mycursor.close()
+    close_db()
     return result
 
 def getStudentCount(search=''):
@@ -84,6 +89,7 @@ def getStudentCount(search=''):
 
   result = mycursor.fetchone()[0]
   mycursor.close()
+  close_db()
 
   return result
 
@@ -95,6 +101,7 @@ def getCourses():
 
   result = mycursor.fetchall()
   mycursor.close()
+  close_db()
   return result
 
 def validateId(studentId):
@@ -103,3 +110,12 @@ def validateId(studentId):
     return False
   else:
     return True
+  
+def getStudentPhotoById(student_id):
+  db = get_db()
+  cursor = db.cursor()
+  cursor.execute("SELECT photo_url FROM student WHERE student_id = %s", (student_id,))
+  result = cursor.fetchone()
+  cursor.close()
+  close_db()
+  return result
