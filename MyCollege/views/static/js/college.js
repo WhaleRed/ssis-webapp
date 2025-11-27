@@ -25,6 +25,16 @@ if (deleteModal) {
 
 $(document).ready(function () {
 
+  function showLoading() {
+    $('#loadingOverlay').fadeIn(100);
+    $('button').prop('disabled', true);
+  }
+
+  function hideLoading() {
+    $('#loadingOverlay').fadeOut(100);
+    $('button').prop('disabled', false);
+  }
+
   const table = $('#colTable').DataTable({
     processing: true,
     serverSide: true,
@@ -70,8 +80,16 @@ $(document).ready(function () {
       url: '/add_college',
       type: 'POST',
       data: { colCodeAdd: colCode, colNameAdd: colName },
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#addModal').modal('hide');
+      },
+
+      success: function () {
         $('#colCode').val('');
         $('#colName').val('');
         showAlert('✅ College added successfully!');
@@ -102,9 +120,17 @@ $(document).ready(function () {
       url: '/edit_college',
       type: 'POST',
       data: pendingData,
-      success: function () {
-        $('#confirmEditModal').modal('hide');
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#editModal').modal('hide');
+        $('#confirmEditModal').modal('hide');
+      },
+
+      success: function () {
         showAlert('✏️ College updated successfully!');
         table.ajax.reload(null, false);
       },
@@ -122,8 +148,16 @@ $(document).ready(function () {
       url: '/delete_college',
       type: 'POST',
       data: { colCodeDelete: colCode },
-      success: function () {
+
+      beforeSend: function () {
+        showLoading();
+      },
+      complete: function () {
+        hideLoading();
         $('#deleteModal').modal('hide');
+      },
+
+      success: function () {
         showAlert('🗑️ College deleted successfully!');
         table.ajax.reload(null, false);
       },
