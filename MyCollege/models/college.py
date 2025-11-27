@@ -1,4 +1,4 @@
-from MyCollege.db import get_db
+from MyCollege.db import get_db, close_db
 
 def addCollege(college):
   db = get_db()
@@ -9,6 +9,7 @@ def addCollege(college):
   db.commit()
 
   mycursor.close()
+  close_db()
 
 def deleteCollege(college_code): 
   db = get_db()
@@ -19,6 +20,7 @@ def deleteCollege(college_code):
   db.commit()
 
   mycursor.close()
+  close_db()
   
 def editCollege(college):
   db = get_db()
@@ -29,6 +31,7 @@ def editCollege(college):
   db.commit()
 
   mycursor.close()
+  close_db()
 
 def populateCollege(page):
   db = get_db()
@@ -38,6 +41,7 @@ def populateCollege(page):
   sql = "SELECT * FROM college OFFSET %s LIMIT 10"
   mycursor.execute(sql, (offset,))
   result = mycursor.fetchall()
+  close_db()
 
   return result
 
@@ -59,6 +63,7 @@ def getAllColleges(search='', start=0, length=10, order_column='college_code', o
   mycursor.execute(query, params)
   result = mycursor.fetchall()
   mycursor.close()
+  close_db()
 
   return result
 
@@ -76,5 +81,6 @@ def getCollegeCount(search=''):
   
   count = mycursor.fetchone()[0]
   mycursor.close()
+  close_db()
 
   return count
