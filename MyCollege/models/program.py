@@ -1,4 +1,4 @@
-from MyCollege.db import get_db
+from MyCollege.db import get_db, close_db
 
 #functions takes list as param
 
@@ -11,6 +11,7 @@ def addProgram(program):
   db.commit()
 
   mycursor.close()
+  close_db()
 
 def deleteProgram(program_code):    
   db = get_db()
@@ -20,6 +21,7 @@ def deleteProgram(program_code):
   db.commit()
   
   mycursor.close()
+  close_db()
 
 def editProgram(program):
   db = get_db()
@@ -30,6 +32,7 @@ def editProgram(program):
   db.commit()
 
   mycursor.close()
+  close_db()
 
 def populateProgram(page):
   db = get_db()
@@ -39,6 +42,7 @@ def populateProgram(page):
   sql = "SELECT * FROM program OFFSET %s LIMIT 25"
   mycursor.execute(sql, (offset,))
   result = mycursor.fetchall()
+  close_db()
 
   return result
 
@@ -61,6 +65,7 @@ def getAllPrograms(search='', start=0, length=10, order_column='program_code', o
 
   result = mycursor.fetchall()
   mycursor.close()
+  close_db()
   return result
 
 def getProgramCount(search=''):
@@ -77,6 +82,7 @@ def getProgramCount(search=''):
 
   count = mycursor.fetchone()[0]
   mycursor.close()
+  close_db()
 
   return count
 
@@ -88,4 +94,5 @@ def getAllColleges():
 
   result = mycrusor.fetchall()
   mycrusor.close()
+  close_db()
   return result
