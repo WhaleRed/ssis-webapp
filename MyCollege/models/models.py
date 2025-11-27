@@ -1,4 +1,4 @@
-from MyCollege.db import get_db
+from MyCollege.db import get_db, close_db
 from flask_login import UserMixin
 import hashlib
 
@@ -21,6 +21,7 @@ class Users(UserMixin):
         cursor.execute(sql, (self.username, password_hash, self.email))
         db.commit()
         cursor.close()
+        close_db()
 
     @classmethod
     def all(cls):
@@ -31,6 +32,7 @@ class Users(UserMixin):
         cursor.execute(sql)
         result = cursor.fetchall()
         cursor.close()
+        close_db()
         return result
 
     @classmethod
@@ -42,6 +44,7 @@ class Users(UserMixin):
             cursor.execute(sql, (id,))
             db.commit()
             cursor.close()
+            close_db()
             return True
         except Exception as e:
             return False
@@ -64,6 +67,7 @@ class Users(UserMixin):
 
             db.commit()
             cursor.close()
+            close_db()
             return True
         except Exception as e:
             print(f"Error updating user: {e}")
@@ -77,6 +81,7 @@ class Users(UserMixin):
         cursor.execute(sql, (user_id,))
         result = cursor.fetchone()
         cursor.close()
+        close_db()
 
         if result:
             return cls(id=result[0], username=result[1], email=result[2], password=result[3])
@@ -90,6 +95,7 @@ class Users(UserMixin):
         cursor.execute(sql, (username,))
         result = cursor.fetchone()
         cursor.close()
+        close_db()
 
         if result:
             return cls(id=result[0], username=result[1], email=result[2], password=result[3])
