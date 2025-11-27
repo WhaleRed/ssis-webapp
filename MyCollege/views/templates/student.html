@@ -34,7 +34,8 @@
       <div class="modal-body">
 
         <!-- Add Form-->
-        <form id="addStudentForm" action="{{url_for('student.add_student')}}" method="POST" enctype="multipart/form-data">
+        <form id="addStudentForm" action="{{url_for('student.add_student')}}" method="POST"
+          enctype="multipart/form-data">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
           <div class="form-group">
@@ -104,9 +105,10 @@
       <div class="modal-body">
 
         <!-- Edit Form-->
-        <form action="{{url_for('student.edit_student')}}" method="POST">
+        <form action="{{url_for('student.edit_student')}}" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <input type="hidden" id="studInitial" name="studInitial">
+          <input type="hidden" id="oldPhotoUrl" name="oldPhotoUrl">
           <div class="form-group">
             <label for="studentIdEdit">ID</label>
             <input class="form-control" id="studentIdEdit" name="idEdit">
@@ -140,6 +142,10 @@
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label for="photoEdit">Photo</label>
+            <input type="file" class="form-control" id="photoEdit" name="photoEdit" accept="image/*">
           </div>
 
           <!-- Footer -->
