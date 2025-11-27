@@ -84,7 +84,10 @@ def add_student():
         addStudent(student)
 
         return jsonify({"message": "Student added successfully"})
-
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'Student ID already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
@@ -136,7 +139,10 @@ def edit_student():
         editStudent(student)
 
         return jsonify({"message": "Student updated successfully"})
-
+    except psycopg2.errors.UniqueViolation:
+        return jsonify({'success': False, 'message': 'Student ID already exists!'}), 400
+    except psycopg2.errors.NotNullViolation:
+        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
@@ -147,11 +153,20 @@ def edit_student():
 def delete_student():
     try:
         studid = request.form['studDelete']
-        student = [studid]
-        deleteStudent(student)
+
+        student = getStudentPhotoById(studid)
+        photo_url = student[0] if student else None
+
+        if photo_url and "default.jpg" not in photo_url:
+            file_path = photo_url.split("/student-img/")[1]
+            supabase.storage.from_("student-img").remove([file_path])
+
+        deleteStudent([studid])
+
         return jsonify({"message": "Student deleted successfully"})
+
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 @student_bp.route('/get_courses')
 @login_required
