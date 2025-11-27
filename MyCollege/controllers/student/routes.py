@@ -50,6 +50,7 @@ def get_students_data():
 
 
 @student_bp.route('/add_student', methods=['POST'])
+@login_required
 def add_student():
     try:
         studId = request.form.get('idAdd')
@@ -99,26 +100,46 @@ def edit_student():
         course = request.form['courseEdit']
         year = request.form['yearEdit']
         gender = request.form['genderEdit']
+        old_photo = request.form.get('oldPhotoUrl')
 
-        if not studId or not fname or not lname or not course or not year or not gender:
+        photo = request.files.get('photoEdit')
+
+        if not all([studId, fname, lname, course, year, gender]):
             return jsonify({'success': False, 'message': 'All fields are required!'}), 400
 
         if not validateId(studId):
             return jsonify({
                 'success': False,
-                'message': ' Invalid Student ID format. Use YYYY-NNNN (e.g., 2025-0241).'
+                'message': 'Invalid Student ID format. Use YYYY-NNNN.'
             }), 400
 
-        student = [studId, fname, lname, year, gender, course, studInitial]
+        photo_url = old_photo
+        if photo:
+            unique_filename = f"{uuid.uuid4()}_{photo.filename}"
+            file_path = f"{studId}/{unique_filename}"
+
+            res = supabase.storage.from_("student-img").upload(
+                file_path,
+                photo.read(),
+                file_options={"content-type": photo.mimetype}
+            )
+
+
+            photo_url = supabase.storage.from_("student-img").get_public_url(file_path)
+
+            if old_photo and "default.jpg" not in old_photo:
+                old_path = old_photo.split("/student-img/")[1]
+                supabase.storage.from_("student-img").remove([old_path])
+
+        # Update DB
+        student = [studId, fname, lname, year, gender, course, photo_url, studInitial]
         editStudent(student)
+
         return jsonify({"message": "Student updated successfully"})
-    #Exceptions
-    except psycopg2.errors.UniqueViolation:
-        return jsonify({'success': False, 'message': 'Student ID# already exists!'}), 400
-    except psycopg2.errors.NotNullViolation:
-        return jsonify({'success': False, 'message': 'All fields are required!'}), 400
+
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 
 
 @student_bp.route('/delete_student', methods=['POST'])
