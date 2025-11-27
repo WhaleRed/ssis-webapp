@@ -59,7 +59,8 @@ $(document).ready(function () {
               data-lname="${row.lname}"
               data-year="${row.year}"
               data-gender="${row.gender}"
-              data-course="${row.course}">
+              data-course="${row.course}"
+              data-photo="${row.photo}">
               Edit
             </button>
             <button class="btn btn-sm btn-danger delete-btn"
@@ -123,6 +124,7 @@ $(document).ready(function () {
     $('#lastNameEdit').val($(this).data('lname'));
     $('#yearEdit').val($(this).data('year'));
     $('#genderEdit').val($(this).data('gender'));
+    $('#oldPhotoUrl').val($(this).data('photo'));
     $('#editModal').modal('show');
 
     loadCourseDropdown($(this).data('course'));
@@ -144,29 +146,43 @@ $(document).ready(function () {
   });
 
   $('#confirmEditSave').on('click', function () {
-    if (!pendingData) return;
-    $.ajax({
-      url: '/edit_student',
-      method: 'POST',
-      data: pendingData,
-      success: function () {
-        $('#confirmEditModal').modal('hide');
-        $('#editModal').modal('hide');
-        showAlert('✏️ Student updated successfully!');
-        table.ajax.reload(null, false);
-      },
-      error: function (xhr) {
-        let msg = 'Error updating student.';
-        try {
-          const response = JSON.parse(xhr.responseText);
-          msg = response.message || msg;
-        } catch (e) {
-          msg = xhr.responseText;
-        }
-        showAlert('❌ ' + msg, 'danger');
+      const formData = new FormData();
+      formData.append('studInitial', $('#studInitial').val());
+      formData.append('idEdit', $('#studentIdEdit').val());
+      formData.append('fnameEdit', $('#firstNameEdit').val());
+      formData.append('lnameEdit', $('#lastNameEdit').val());
+      formData.append('courseEdit', $('#courseEdit').val());
+      formData.append('yearEdit', $('#yearEdit').val());
+      formData.append('genderEdit', $('#genderEdit').val());
+      formData.append('oldPhotoUrl', $('#oldPhotoUrl').val());
+
+      const file = $('#photoEdit')[0].files[0];
+      if (file) {
+          formData.append('photoEdit', file);
       }
-    });
+
+      $.ajax({
+          url: '/edit_student',
+          method: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+              $('#confirmEditModal').modal('hide');
+              $('#editModal').modal('hide');
+              showAlert('✏️ Student updated successfully!');
+              table.ajax.reload(null, false);
+          },
+          error: function (xhr) {
+              let msg = 'Error updating student.';
+              try {
+                  msg = JSON.parse(xhr.responseText).message;
+              } catch {}
+              showAlert('❌ ' + msg, 'danger');
+          }
+      });
   });
+
 
   // DELETE
   $(document).on('click', '.delete-btn', function () {
