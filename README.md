@@ -2,26 +2,23 @@
 
 SSIS (Simple Student Information System) is a web application designed to manage student information efficiently. It provides full CRUDL (Create, Read, Update, Delete, List) functionality along with search and filter features, making it easy to handle data for colleges, programs, and students.
 
-Features
+# Features
 
-CRUDL Operations: Add, view, update, delete, and list entries for:
+- CRUDL Operations: Add, view, update, delete, and list entries for:
+  Colleges
+  Programs
+  Students
 
-Colleges
+- Search Functionality: Quickly find colleges, programs, or students using keywords.
 
-Programs
+- Filter Options: Narrow down results based on specific criteria for better data management.
 
-Students
+- User-Friendly Interface: Built with responsive Bootstrap design for a clean and easy-to-navigate layout.
 
-Search Functionality: Quickly find colleges, programs, or students using keywords.
+# Technology Stack
 
-Filter Options: Narrow down results based on specific criteria for better data management.
+- Backend: Flask (Python)
 
-User-Friendly Interface: Built with responsive Bootstrap design for a clean and easy-to-navigate layout.
+- Frontend: HTML, CSS, JavaScript, Bootstrap
 
-Technology Stack
-
-Backend: Flask (Python)
-
-Frontend: HTML, CSS, JavaScript, Bootstrap
-
-Database: Supabase (PostgreSQL)
+- Database: Supabase (PostgreSQL)
